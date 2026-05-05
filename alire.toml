@@ -1,0 +1,15 @@
+name = "responsif_ada"
+description = "Ada port of ResponsIF"
+version = "0.1.0-dev"
+
+authors = ["Jay Nabonne"]
+maintainers = ["Jay Nabonne <jaynabonne@gmail.com>"]
+licenses = "Apache-2.0"
+website = ""
+tags = []
+
+executables = ["responsif_ada", "test_runner"]
+
+[[depends-on]]
+aunit = "^24.0.0"
+

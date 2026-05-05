@@ -1,0 +1,58 @@
+# GNAT / gprbuild build output
+obj/
+lib/
+bin/
+alire/
+config/
+
+# Object and dependency files
+*.o
+*.ali
+*.d
+
+# Libraries
+*.a
+*.so
+*.dll
+*.dylib
+
+# Executables
+*.exe
+*.out
+
+# Coverage / profiling
+*.gcno
+*.gcda
+*.gcov
+
+# Temporary files
+*~
+*.swp
+*.tmp
+
+# Backup files
+*.bak
+
+# Core dumps
+core
+core.*
+
+# Logs
+*.log
+
+# GNAT Studio project state
+.gnatstudio/
+.gps/
+*.autosave
+*.lock
+*.session
+
+# Glade backups
+*.glade~
+*.ui~
+
+# Generated UI files (if any tools produce them)
+*.ui.bak
+
+.clang-format
+
