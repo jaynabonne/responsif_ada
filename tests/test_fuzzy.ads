@@ -1,7 +1,7 @@
 with AUnit;
 with AUnit.Test_Cases;
 
-package Test_Topics is
+package Test_Fuzzy is
 
    type Test_Case is new AUnit.Test_Cases.Test_Case with null record;
 
@@ -10,7 +10,4 @@ package Test_Topics is
    overriding function Name
      (T : Test_Case) return AUnit.Message_String;
 
-   procedure Test_Decay
-     (T : in out AUnit.Test_Cases.Test_Case'Class);
-
-end Test_Topics;
+end Test_Fuzzy;
