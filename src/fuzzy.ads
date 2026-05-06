@@ -12,6 +12,8 @@ package Fuzzy is
    function Fuzzy_Rem (A, B : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Difference (A, B : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Adjust (
-      Value, Target, Increment : Fuzzy_Value
+      Value : Fuzzy_Value;
+      Target : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
    ) return Fuzzy_Value;
 end Fuzzy;

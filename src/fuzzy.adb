@@ -52,8 +52,11 @@ package body Fuzzy is
       return Fuzzy_Value'Min (abs (A - B), 1.0);
    end Fuzzy_Difference;
 
-   function Fuzzy_Adjust (Value, Target, Increment : Fuzzy_Value)
-      return Fuzzy_Value is
+   function Fuzzy_Adjust (
+      Value : Fuzzy_Value;
+      Target : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
+   ) return Fuzzy_Value is
       New_Value : constant Fuzzy_Value := Value + (Target - Value) * Increment;
    begin
       return (
