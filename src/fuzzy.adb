@@ -14,4 +14,9 @@ package body Fuzzy is
    begin
       return 1.0 - abs (F1 - F2);
    end Fuzzy_Equals;
+
+   function Fuzzy_Or (F1, F2 : Fuzzy_Value) return Fuzzy_Value is
+   begin
+      return Fuzzy_Value'Max (F1, F2);
+   end Fuzzy_Or;
 end Fuzzy;
