@@ -20,10 +20,20 @@ package body Test_Fuzzy is
       );
    end Test_Not;
 
+   procedure Test_Un
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+      Assert_Equal (Fuzzy_Un (0.0), 0.0, "should return 0.0 for 0");
+      Assert_Equal (Fuzzy_Un (1.0), -1.0, "should return -1 for 1");
+   end Test_Un;
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
-      Register_Routine (T, Test_Not'Access, "FuzzyNot");
+      Register_Routine (T, Test_Not'Access, "Fuzzy_Not");
+      Register_Routine (T, Test_Un'Access, "Fuzzy_Un");
    end Register_Tests;
 
    overriding function Name
