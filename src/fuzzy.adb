@@ -49,7 +49,17 @@ package body Fuzzy is
 
    function Fuzzy_Difference (A, B : Fuzzy_Value) return Fuzzy_Value is
    begin
-   --  Math.min(Math.abs(a-b), 1.0);
       return Fuzzy_Value'Min (abs (A - B), 1.0);
    end Fuzzy_Difference;
+
+   function Fuzzy_Adjust (Value, Target, Increment : Fuzzy_Value)
+      return Fuzzy_Value is
+      New_Value : constant Fuzzy_Value := Value + (Target - Value) * Increment;
+   begin
+      return (
+         if abs (Target - New_Value) < 0.005
+            then Target
+            else New_Value
+      );
+   end Fuzzy_Adjust;
 end Fuzzy;

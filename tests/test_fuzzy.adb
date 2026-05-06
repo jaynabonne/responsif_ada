@@ -152,7 +152,6 @@ package body Test_Fuzzy is
       Assert_Equal (Fuzzy_Xor (0.0, -0.5), 0.0, "should return xor");
       Assert_Equal (Fuzzy_Xor (0.0, -0.75), 0.0, "should return xor");
       Assert_Equal (Fuzzy_Xor (0.0, -1.0), 0.0, "should return xor");
-
    end Test_Xor;
 
    --  Tests for Fuzzy_Mod
@@ -161,12 +160,9 @@ package body Test_Fuzzy is
    is
       pragma Unreferenced (T);
    begin
-   --  should return the (A and not B) or (B and not A)
-   --  for the values A and B
       Assert_Equal (Fuzzy_Mod (0.5, 0.4), 0.5, "should truncate");
       Assert_Equal (Fuzzy_Mod (0.4, 0.4), 0.0, "should truncate");
       Assert_Equal (Fuzzy_Mod (0.3, 0.4), 0.0, "should truncate");
-
    end Test_Mod;
 
    --  Tests for Fuzzy_Rem
@@ -175,12 +171,9 @@ package body Test_Fuzzy is
    is
       pragma Unreferenced (T);
    begin
-   --  should return the (A and not B) or (B and not A)
-   --  for the values A and B
       Assert_Equal (Fuzzy_Rem (0.5, 0.4), 1.0, "should round");
       Assert_Equal (Fuzzy_Rem (0.4, 0.4), 1.0, "should round");
       Assert_Equal (Fuzzy_Rem (0.3, 0.4), 0.3, "should round");
-
    end Test_Rem;
 
    --  Tests for Fuzzy_Difference
@@ -189,8 +182,6 @@ package body Test_Fuzzy is
    is
       pragma Unreferenced (T);
    begin
-   --  should return the (A and not B) or (B and not A)
-   --  for the values A and B
       Assert_Equal (
          Fuzzy_Difference (0.4, 0.4), 0.0,
          "should return 0 for the same value"
@@ -207,8 +198,27 @@ package body Test_Fuzzy is
          Fuzzy_Difference (0.6, -0.8), 1.0,
          "should return maximum difference of 1"
       );
-
    end Test_Difference;
+
+   --  Tests for Fuzzy_Adjust
+   procedure Test_Adjust
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+      Assert_GreaterThan (
+         Fuzzy_Adjust (0.3, 1.0, 0.5), 0.3,
+         "should return a value closer to the target value than the parameter"
+      );
+      Assert_Equal (
+         Fuzzy_Adjust (1.0, 1.0, 0.5), 1.0,
+         "should not adjust beyond the target"
+      );
+      Assert_Equal (
+         Fuzzy_Adjust (0.994, 1.0, 0.5), 1.0,
+         "should clamp to the target value when arbitrarily close"
+      );
+   end Test_Adjust;
 
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
@@ -222,6 +232,7 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_Mod'Access, "Fuzzy_Mod");
       Register_Routine (T, Test_Rem'Access, "Fuzzy_Rem");
       Register_Routine (T, Test_Difference'Access, "Fuzzy_Difference");
+      Register_Routine (T, Test_Adjust'Access, "Fuzzy_Adjust");
    end Register_Tests;
 
    overriding function Name

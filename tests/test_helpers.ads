@@ -5,4 +5,14 @@ package Test_Helpers is
       Msg : String := ""
    );
 
+   procedure Assert_GreaterThan (
+      Actual, Expected : Float;
+      Msg : String := ""
+   );
+
+   procedure Assert_LessThan (
+      Actual, Expected : Float;
+      Msg : String := ""
+   );
+
 end Test_Helpers;
