@@ -65,4 +65,20 @@ package body Fuzzy is
             else New_Value
       );
    end Fuzzy_Adjust;
+
+   function Fuzzy_More (
+      Value : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
+   ) return Fuzzy_Value is
+   begin
+      return Fuzzy_Adjust (Value, 1.0, Increment);
+   end Fuzzy_More;
+
+   function Fuzzy_Less (
+      Value : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
+   ) return Fuzzy_Value is
+   begin
+      return Fuzzy_Adjust (Value, -1.0, Increment);
+   end Fuzzy_Less;
 end Fuzzy;

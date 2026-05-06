@@ -16,4 +16,12 @@ package Fuzzy is
       Target : Fuzzy_Value;
       Increment : Fuzzy_Value := 0.5
    ) return Fuzzy_Value;
+   function Fuzzy_More (
+      Value : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
+   ) return Fuzzy_Value;
+   function Fuzzy_Less (
+      Value : Fuzzy_Value;
+      Increment : Fuzzy_Value := 0.5
+   ) return Fuzzy_Value;
 end Fuzzy;

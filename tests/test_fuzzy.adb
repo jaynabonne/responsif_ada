@@ -220,6 +220,38 @@ package body Test_Fuzzy is
       );
    end Test_Adjust;
 
+   --  Tests for Fuzzy_More
+   procedure Test_More
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+      Assert_GreaterThan (
+         Fuzzy_More (0.3, 0.5), 0.3,
+         "should return a value closer to 1 than the parameter"
+      );
+      Assert_Equal (
+         Fuzzy_More (1.0, 0.5), 1.0,
+         "should not adjust beyond 1"
+      );
+   end Test_More;
+
+   --  Tests for Fuzzy_Less
+   procedure Test_Less
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+      Assert_LessThan (
+         Fuzzy_Less (0.7, 0.5), 0.7,
+         "should return a value closer to -1 than the parameter"
+      );
+      Assert_Equal (
+         Fuzzy_Less (-1.0, 0.5), -1.0,
+         "should not adjust beyond -1"
+      );
+   end Test_Less;
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -233,6 +265,8 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_Rem'Access, "Fuzzy_Rem");
       Register_Routine (T, Test_Difference'Access, "Fuzzy_Difference");
       Register_Routine (T, Test_Adjust'Access, "Fuzzy_Adjust");
+      Register_Routine (T, Test_More'Access, "Fuzzy_More");
+      Register_Routine (T, Test_Less'Access, "Fuzzy_Less");
    end Register_Tests;
 
    overriding function Name
