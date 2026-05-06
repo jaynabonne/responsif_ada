@@ -8,4 +8,6 @@ package Fuzzy is
    function Fuzzy_Xor (A, B : Fuzzy_Value) return Fuzzy_Value;
    --  Fuzzy truncation
    function Fuzzy_Mod (A, B : Fuzzy_Value) return Fuzzy_Value;
+   --  Fuzzy round
+   function Fuzzy_Rem (A, B : Fuzzy_Value) return Fuzzy_Value;
 end Fuzzy;

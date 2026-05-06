@@ -41,4 +41,10 @@ package body Fuzzy is
    begin
       return (if A > B then A else 0.0);
    end Fuzzy_Mod;
+
+   function Fuzzy_Rem (A, B : Fuzzy_Value) return Fuzzy_Value is
+   begin
+      return (if A < B then A else 1.0);
+   end Fuzzy_Rem;
+
 end Fuzzy;

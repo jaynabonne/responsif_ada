@@ -169,6 +169,20 @@ package body Test_Fuzzy is
 
    end Test_Mod;
 
+   --  Tests for Fuzzy_Rem
+   procedure Test_Rem
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+   --  should return the (A and not B) or (B and not A)
+   --  for the values A and B
+      Assert_Equal (Fuzzy_Rem (0.5, 0.4), 1.0, "should round");
+      Assert_Equal (Fuzzy_Rem (0.4, 0.4), 1.0, "should round");
+      Assert_Equal (Fuzzy_Rem (0.3, 0.4), 0.3, "should round");
+
+   end Test_Rem;
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -179,6 +193,7 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_And'Access, "Fuzzy_And");
       Register_Routine (T, Test_Xor'Access, "Fuzzy_Xor");
       Register_Routine (T, Test_Mod'Access, "Fuzzy_Mod");
+      Register_Routine (T, Test_Rem'Access, "Fuzzy_Rem");
    end Register_Tests;
 
    overriding function Name
