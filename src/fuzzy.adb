@@ -10,4 +10,8 @@ package body Fuzzy is
       return 0.0 - F;
    end Fuzzy_Un;
 
+   function Fuzzy_Equals (F1, F2 : Fuzzy_Value) return Fuzzy_Value is
+   begin
+      return 1.0 - abs (F1 - F2);
+   end Fuzzy_Equals;
 end Fuzzy;
