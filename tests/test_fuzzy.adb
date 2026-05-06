@@ -115,6 +115,47 @@ package body Test_Fuzzy is
       );
    end Test_And;
 
+   --  Tests for Fuzzy_Xor
+   procedure Test_Xor
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+   --  should return the (A and not B) or (B and not A)
+   --  for the values A and B
+      Assert_Equal (Fuzzy_Xor (1.0, 0.0), 1.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, 1.0), 1.0, "should return xor");
+
+      Assert_Equal (Fuzzy_Xor (1.0, 1.0), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.75, 0.75), 0.25, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.5, 0.5), 0.5, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.25, 0.25), 0.25, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.5, 0.0), 0.5, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, 0.0), 0.0, "should return xor");
+
+      Assert_Equal (Fuzzy_Xor (1.0, -1.0), 1.0, "should return xor");
+
+      Assert_Equal (Fuzzy_Xor (-0.25, -0.1), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-0.25, -0.25), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-0.5, -0.55), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-0.75, -0.75), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-1.0, -0.1), 0.0, "should return xor");
+
+      Assert_Equal (Fuzzy_Xor (-1.0, -1.0), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-1.0, -0.5), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, -1.0), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.5, -0.5), 0.5, "should return xor");
+      Assert_Equal (Fuzzy_Xor (-0.5, -0.5), 0.0, "should return xor");
+
+      Assert_Equal (Fuzzy_Xor (0.0, -1.0), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, -0.25), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, -0.5), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, -0.75), 0.0, "should return xor");
+      Assert_Equal (Fuzzy_Xor (0.0, -1.0), 0.0, "should return xor");
+
+   end Test_Xor;
+
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -123,6 +164,7 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_Equals'Access, "Fuzzy_Equals");
       Register_Routine (T, Test_Or'Access, "Fuzzy_Or");
       Register_Routine (T, Test_And'Access, "Fuzzy_And");
+      Register_Routine (T, Test_Xor'Access, "Fuzzy_Xor");
    end Register_Tests;
 
    overriding function Name
