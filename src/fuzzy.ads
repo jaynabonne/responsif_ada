@@ -1,3 +1,4 @@
 package Fuzzy is
-   function FuzzyNot (F : Float) return Float;
+   subtype Fuzzy_Value is Float range -1.0 .. 1.0;
+   function Fuzzy_Not (F : Fuzzy_Value) return Fuzzy_Value;
 end Fuzzy;

@@ -1,8 +1,8 @@
 package body Fuzzy is
 
-   function FuzzyNot (F : Float) return Float is
+   function Fuzzy_Not (F : Fuzzy_Value) return Fuzzy_Value is
    begin
-      return Float'Max (Float'Min (1.0 - F, 1.0), 0.0);
-   end FuzzyNot;
+      return Fuzzy_Value'Max (Fuzzy_Value'Min (1.0 - F, 1.0), 0.0);
+   end Fuzzy_Not;
 
 end Fuzzy;

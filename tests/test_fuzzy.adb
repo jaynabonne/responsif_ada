@@ -11,17 +11,12 @@ package body Test_Fuzzy is
    is
       pragma Unreferenced (T);
    begin
-      Assert_Equal (FuzzyNot (1.0), 0.0, "should return 0 for 1");
-      Assert_Equal (FuzzyNot (0.0), 1.0, "should return 1 for 0");
+      Assert_Equal (Fuzzy_Not (1.0), 0.0, "should return 0 for 1");
+      Assert_Equal (Fuzzy_Not (0.0), 1.0, "should return 1 for 0");
       Assert_Equal (
-         FuzzyNot (-1.0),
+         Fuzzy_Not (-1.0),
          1.0,
          "should return 1 for negative value"
-      );
-      Assert_Equal (
-         FuzzyNot (3.0),
-         0.0,
-         "should return 0 for value greater than 1"
       );
    end Test_Not;
 
