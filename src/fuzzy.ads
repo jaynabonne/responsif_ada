@@ -10,4 +10,5 @@ package Fuzzy is
    function Fuzzy_Mod (A, B : Fuzzy_Value) return Fuzzy_Value;
    --  Fuzzy round
    function Fuzzy_Rem (A, B : Fuzzy_Value) return Fuzzy_Value;
+   function Fuzzy_Difference (A, B : Fuzzy_Value) return Fuzzy_Value;
 end Fuzzy;

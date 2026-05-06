@@ -183,6 +183,33 @@ package body Test_Fuzzy is
 
    end Test_Rem;
 
+   --  Tests for Fuzzy_Difference
+   procedure Test_Difference
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+   --  should return the (A and not B) or (B and not A)
+   --  for the values A and B
+      Assert_Equal (
+         Fuzzy_Difference (0.4, 0.4), 0.0,
+         "should return 0 for the same value"
+      );
+      Assert_Equal (
+         Fuzzy_Difference (0.7, 0.4), 0.3,
+         "should return difference for decreasing values"
+      );
+      Assert_Equal (
+         Fuzzy_Difference (0.2, 0.8), 0.6,
+         "should return difference for increasing values"
+      );
+      Assert_Equal (
+         Fuzzy_Difference (0.6, -0.8), 1.0,
+         "should return maximum difference of 1"
+      );
+
+   end Test_Difference;
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -194,6 +221,7 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_Xor'Access, "Fuzzy_Xor");
       Register_Routine (T, Test_Mod'Access, "Fuzzy_Mod");
       Register_Routine (T, Test_Rem'Access, "Fuzzy_Rem");
+      Register_Routine (T, Test_Difference'Access, "Fuzzy_Difference");
    end Register_Tests;
 
    overriding function Name

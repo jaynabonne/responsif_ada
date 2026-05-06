@@ -47,4 +47,9 @@ package body Fuzzy is
       return (if A < B then A else 1.0);
    end Fuzzy_Rem;
 
+   function Fuzzy_Difference (A, B : Fuzzy_Value) return Fuzzy_Value is
+   begin
+   --  Math.min(Math.abs(a-b), 1.0);
+      return Fuzzy_Value'Min (abs (A - B), 1.0);
+   end Fuzzy_Difference;
 end Fuzzy;
