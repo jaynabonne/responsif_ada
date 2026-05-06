@@ -4,4 +4,5 @@ package Fuzzy is
    function Fuzzy_Un (F : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Equals (F1, F2 : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Or (F1, F2 : Fuzzy_Value) return Fuzzy_Value;
+   function Fuzzy_And (F1, F2 : Fuzzy_Value) return Fuzzy_Value;
 end Fuzzy;

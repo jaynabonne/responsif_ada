@@ -83,6 +83,38 @@ package body Test_Fuzzy is
       );
    end Test_Or;
 
+   --  Tests for Fuzzy_And
+   procedure Test_And
+     (T : in out AUnit.Test_Cases.Test_Case'Class)
+   is
+      pragma Unreferenced (T);
+   begin
+      Assert_Equal (
+         Fuzzy_And (1.0, 1.0), 1.0,
+         "should return the min of two values"
+      );
+      Assert_Equal (
+         Fuzzy_And (1.0, 0.0), 0.0,
+         "should return the min of two values"
+      );
+      Assert_Equal (
+         Fuzzy_And (0.0, 1.0), 0.0,
+         "should return the min of two values"
+      );
+      Assert_Equal (
+         Fuzzy_And (0.0, 0.0), 0.0,
+         "should return the min of two values"
+      );
+      Assert_Equal (
+         Fuzzy_And (0.0, -1.0), -1.0,
+         "should return the min of two values"
+      );
+      Assert_Equal (
+         Fuzzy_And (0.5, -0.5), -0.5,
+         "should return the min of two values"
+      );
+   end Test_And;
+
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -90,6 +122,7 @@ package body Test_Fuzzy is
       Register_Routine (T, Test_Un'Access, "Fuzzy_Un");
       Register_Routine (T, Test_Equals'Access, "Fuzzy_Equals");
       Register_Routine (T, Test_Or'Access, "Fuzzy_Or");
+      Register_Routine (T, Test_And'Access, "Fuzzy_And");
    end Register_Tests;
 
    overriding function Name
