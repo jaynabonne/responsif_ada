@@ -1,9 +1,13 @@
+with Test_Generics;
+
 package Test_Helpers is
 
-   procedure Assert_Equal (
-      Actual, Expected : Float;
-      Msg : String := ""
-   );
+   function Float_Equal is new Test_Generics.Generic_Float_Equal;
+
+   procedure Assert_Equal is new Test_Generics.Generic_Assert_Equal
+     (T     => Float,
+      Image => Float'Image,
+      Equal => Float_Equal);
 
    procedure Assert_GreaterThan (
       Actual, Expected : Float;
