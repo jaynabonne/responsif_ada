@@ -19,9 +19,8 @@ package body Test_Expression is
 
    --  Test for Is_Compiled with an expression that has not been compiled
    procedure Test_Uncompiled_Expression
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
       Compiled : Compiled_Expression;
    begin
       Compile ("", Compiled);
@@ -30,9 +29,8 @@ package body Test_Expression is
 
    --  Test for compiling a variable
    procedure Test_Variable_Expression
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
       Compiled : Compiled_Expression;
       Result : Float;
    begin
@@ -57,9 +55,8 @@ package body Test_Expression is
    end Register_Tests;
 
    overriding function Name
-     (T : Test_Case) return AUnit.Message_String
+     (T : Test_Case with Unreferenced) return AUnit.Message_String
    is
-      pragma Unreferenced (T);
    begin
       return AUnit.Format ("Expression tests");
    end Name;

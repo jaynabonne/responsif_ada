@@ -1,6 +1,6 @@
 package Test_Generics is
 
-generic
+   generic
       type T is private;
       with function Image (X : T) return String;
       with function Equal (L, R : T) return Boolean is <>;

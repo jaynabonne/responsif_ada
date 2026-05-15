@@ -8,9 +8,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Not
    procedure Test_Not
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (Fuzzy_Not (1.0), 0.0, "should return 0 for 1");
       Assert_Equal (Fuzzy_Not (0.0), 1.0, "should return 1 for 0");
@@ -23,9 +22,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Un
    procedure Test_Un
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (Fuzzy_Un (0.0), 0.0, "should return 0.0 for 0");
       Assert_Equal (Fuzzy_Un (1.0), -1.0, "should return -1 for 1");
@@ -33,9 +31,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Equals
    procedure Test_Equals
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (
          Fuzzy_Equals (1.0, 1.0), 1.0,
@@ -53,9 +50,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Or
    procedure Test_Or
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (
          Fuzzy_Or (1.0, 1.0), 1.0,
@@ -85,9 +81,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_And
    procedure Test_And
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (
          Fuzzy_And (1.0, 1.0), 1.0,
@@ -117,9 +112,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Xor
    procedure Test_Xor
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
    --  should return the (A and not B) or (B and not A)
    --  for the values A and B
@@ -156,9 +150,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Mod
    procedure Test_Mod
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (Fuzzy_Mod (0.5, 0.4), 0.5, "should truncate");
       Assert_Equal (Fuzzy_Mod (0.4, 0.4), 0.0, "should truncate");
@@ -167,9 +160,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Rem
    procedure Test_Rem
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (Fuzzy_Rem (0.5, 0.4), 1.0, "should round");
       Assert_Equal (Fuzzy_Rem (0.4, 0.4), 1.0, "should round");
@@ -178,9 +170,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Difference
    procedure Test_Difference
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_Equal (
          Fuzzy_Difference (0.4, 0.4), 0.0,
@@ -202,9 +193,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Adjust
    procedure Test_Adjust
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_GreaterThan (
          Fuzzy_Adjust (0.3, 1.0, 0.5), 0.3,
@@ -222,9 +212,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_More
    procedure Test_More
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_GreaterThan (
          Fuzzy_More (0.3, 0.5), 0.3,
@@ -238,9 +227,8 @@ package body Test_Fuzzy is
 
    --  Tests for Fuzzy_Less
    procedure Test_Less
-     (T : in out AUnit.Test_Cases.Test_Case'Class)
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      pragma Unreferenced (T);
    begin
       Assert_LessThan (
          Fuzzy_Less (0.7, 0.5), 0.7,
@@ -270,9 +258,8 @@ package body Test_Fuzzy is
    end Register_Tests;
 
    overriding function Name
-     (T : Test_Case) return AUnit.Message_String
+     (T : Test_Case with Unreferenced) return AUnit.Message_String
    is
-      pragma Unreferenced (T);
    begin
       return AUnit.Format ("Fuzzy tests");
    end Name;
