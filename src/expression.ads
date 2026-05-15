@@ -3,6 +3,17 @@ with Ada.Finalization;
 package Expression is
 
    type Compiled_Expression is limited private;
+   type Lookup_Result (Found : Boolean := False) is record
+      case Found is
+         when True =>
+            Value : Float;
+         when False =>
+            null;
+      end case;
+   end record;
+
+   type Lookup_Function is access function (Name : String)
+      return Lookup_Result;
 
    function Is_Compiled (Expr : Compiled_Expression) return Boolean;
 
@@ -12,8 +23,8 @@ package Expression is
    );
 
    function Evaluate (
-      Expr    : Compiled_Expression
-      --  Context : Evaluation_Context
+      Expr    : Compiled_Expression;
+      Lookup  : Lookup_Function
    ) return Float;
 
 private
