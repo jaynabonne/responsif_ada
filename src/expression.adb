@@ -30,15 +30,19 @@ package body Expression is
       Steps : Steps_Vectors.Vector;
    end record;
 
-   function Is_Compiled (Expr : Compiled_Expression) return Boolean is
-   begin
-      return Expr.Data /= null;
-   end Is_Compiled;
-
    function Is_Digit (C : Character) return Boolean is
    begin
       return C >= '0' and then C <= '9';
    end Is_Digit;
+
+   ---
+   ---  Public interface implementations
+   ---
+
+   function Is_Compiled (Expr : Compiled_Expression) return Boolean is
+   begin
+      return Expr.Data /= null;
+   end Is_Compiled;
 
    procedure Compile (
       Source : String;
