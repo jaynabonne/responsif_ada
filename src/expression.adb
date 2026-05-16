@@ -1,28 +1,14 @@
 with Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
+with Expression.Steps;
 
 package body Expression is
    use Ada.Strings.Unbounded;
-
-   type Expression_Kind is (
-      Variable_Expression,
-      Numeric_Expression
-   );
-
-   type Expression_Step (
-      Kind : Expression_Kind
-   ) is record
-      case Kind is
-         when Variable_Expression =>
-            Variable : Unbounded_String := Null_Unbounded_String;
-         when Numeric_Expression =>
-            Value : Float := 0.0;
-      end case;
-   end record;
+   use Expression.Steps;
 
    package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
       Index_Type   => Positive,
-      Element_Type => Expression_Step
+      Element_Type => Compiled_Step
    );
 
    type Expression_Data is
@@ -56,16 +42,16 @@ package body Expression is
       Expr.Data := new Expression_Data;
 
       if Is_Digit (Source (Source'First)) then
-         Expr.Data.Steps.Append (Expression_Step'(
-            Kind => Numeric_Expression,
+         Expr.Data.Steps.Append (Compiled_Step'(
+            Kind => Numeric_Step,
             Value => Float'Value (Source)
          ));
          return;
       end if;
 
-      Expr.Data.Steps.Append (Expression_Step'(
-         Kind => Variable_Expression,
-         Variable => To_Unbounded_String (Source)
+      Expr.Data.Steps.Append (Compiled_Step'(
+         Kind => Variable_Step,
+         Name => To_Unbounded_String (Source)
       ));
    end Compile;
 
@@ -78,12 +64,12 @@ package body Expression is
       end if;
 
       case Expr.Data.Steps (1).Kind is
-         when Numeric_Expression =>
+         when Numeric_Step =>
             return Expr.Data.Steps (1).Value;
-         when Variable_Expression =>
+         when Variable_Step =>
             declare
                Variable : constant String :=
-                  To_String (Expr.Data.Steps (1).Variable);
+                  To_String (Expr.Data.Steps (1).Name);
                Result : constant Lookup_Result := Lookup.all (Variable);
             begin
                if Result.Found then
