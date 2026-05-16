@@ -1,9 +1,7 @@
-with Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Vectors;
 with Expression.Steps;
 
 package body Expression is
-   use Ada.Strings.Unbounded;
    use Expression.Steps;
 
    package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
@@ -42,17 +40,11 @@ package body Expression is
       Expr.Data := new Expression_Data;
 
       if Is_Digit (Source (Source'First)) then
-         Expr.Data.Steps.Append (Compiled_Step'(
-            Kind => Numeric_Step,
-            Value => Float'Value (Source)
-         ));
+         Expr.Data.Steps.Append (Create_Numeric_Step (Float'Value (Source)));
          return;
       end if;
 
-      Expr.Data.Steps.Append (Compiled_Step'(
-         Kind => Variable_Step,
-         Name => To_Unbounded_String (Source)
-      ));
+      Expr.Data.Steps.Append (Create_Variable_Step (Source));
    end Compile;
 
    function Evaluate (
@@ -63,22 +55,6 @@ package body Expression is
          raise Program_Error with "Expression not compiled";
       end if;
 
-      case Expr.Data.Steps (1).Kind is
-         when Numeric_Step =>
-            return Expr.Data.Steps (1).Value;
-         when Variable_Step =>
-            declare
-               Variable : constant String :=
-                  To_String (Expr.Data.Steps (1).Name);
-               Result : constant Lookup_Result := Lookup.all (Variable);
-            begin
-               if Result.Found then
-                  return Result.Value;
-               else
-                  raise Program_Error with "Variable not found: " & Variable;
-               end if;
-            end;
-      end case;
-
+      return Execute_Step (Expr.Data.Steps (1), Lookup => Lookup);
    end Evaluate;
 end Expression;

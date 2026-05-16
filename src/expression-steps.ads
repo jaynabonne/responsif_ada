@@ -17,4 +17,15 @@ private package Expression.Steps is
       end case;
    end record;
 
+   function Create_Variable_Step (Name : String) return Compiled_Step is
+      (Kind => Variable_Step, Name => To_Unbounded_String (Name));
+
+   function Create_Numeric_Step (Number : Float) return Compiled_Step is
+      (Kind => Numeric_Step, Value => Number);
+
+   function Execute_Step  (
+      Step   : Compiled_Step;
+      Lookup : Expression.Lookup_Function
+   ) return Float;
+
 end Expression.Steps;
