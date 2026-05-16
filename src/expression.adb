@@ -1,21 +1,18 @@
 with Ada.Strings.Unbounded;
-with Ada.Containers.Vectors;
+with Ada.Containers.Indefinite_Vectors;
 
 package body Expression is
    use Ada.Strings.Unbounded;
 
-   type Expression_Step_Type is (
-      None,
+   type Expression_Kind is (
       Variable_Expression,
       Numeric_Expression
    );
 
    type Expression_Step (
-      Expression_Kind : Expression_Step_Type := None
+      Kind : Expression_Kind
    ) is record
-      case Expression_Kind is
-         when None =>
-            null;
+      case Kind is
          when Variable_Expression =>
             Variable : Unbounded_String := Null_Unbounded_String;
          when Numeric_Expression =>
@@ -23,7 +20,7 @@ package body Expression is
       end case;
    end record;
 
-   package Steps_Vectors is new Ada.Containers.Vectors (
+   package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
       Index_Type   => Positive,
       Element_Type => Expression_Step
    );
@@ -56,14 +53,14 @@ package body Expression is
 
       if Is_Digit (Source (Source'First)) then
          Expr.Data.Steps.Append (Expression_Step'(
-            Expression_Kind => Numeric_Expression,
+            Kind => Numeric_Expression,
             Value => Float'Value (Source)
          ));
          return;
       end if;
 
       Expr.Data.Steps.Append (Expression_Step'(
-         Expression_Kind => Variable_Expression,
+         Kind => Variable_Expression,
          Variable => To_Unbounded_String (Source)
       ));
    end Compile;
@@ -76,24 +73,21 @@ package body Expression is
          raise Program_Error with "Expression not compiled";
       end if;
 
-      case Expr.Data.Steps (1).Expression_Kind is
-         when None =>
-            raise Program_Error with "Expression has no steps";
+      case Expr.Data.Steps (1).Kind is
          when Numeric_Expression =>
             return Expr.Data.Steps (1).Value;
          when Variable_Expression =>
-            null; --  handled below
-         declare
-            Variable : constant String :=
-               To_String (Expr.Data.Steps (1).Variable);
-            Result : constant Lookup_Result := Lookup.all (Variable);
-         begin
-            if Result.Found then
-               return Result.Value;
-            else
-               raise Program_Error with "Variable not found: " & Variable;
-            end if;
-         end;
+            declare
+               Variable : constant String :=
+                  To_String (Expr.Data.Steps (1).Variable);
+               Result : constant Lookup_Result := Lookup.all (Variable);
+            begin
+               if Result.Found then
+                  return Result.Value;
+               else
+                  raise Program_Error with "Variable not found: " & Variable;
+               end if;
+            end;
       end case;
 
    end Evaluate;
