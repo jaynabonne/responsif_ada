@@ -50,6 +50,9 @@ package body Expression is
          raise Program_Error with "Expression not compiled";
       end if;
 
-      return Expression.Evaluate.Evaluate_Expression (Expr.Data.Steps, Lookup => Lookup);
+      return Expression.Evaluate.Evaluate_Expression (
+         Expr.Data.Steps,
+         Lookup => Lookup
+      );
    end Eval;
 end Expression;

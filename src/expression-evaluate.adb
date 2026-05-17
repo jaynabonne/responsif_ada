@@ -1,12 +1,21 @@
 with Expression.Steps; use Expression.Steps;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
+with Ada.Containers.Vectors;
 
 package body Expression.Evaluate is
-   function Execute_Step  (
+   package Stack_Containers is new Ada.Containers.Vectors (
+      Index_Type   => Natural,
+      Element_Type => Float
+   );
+
+   subtype Evaluation_Stack is Stack_Containers.Vector;
+
+   procedure Execute_Step  (
       Step   : Compiled_Step;
-      Lookup : Expression.Lookup_Function
-   ) return Float is
+      Lookup : Expression.Lookup_Function;
+      Stack  : in out Evaluation_Stack
+   ) is
    begin
       case Step.Kind is
          when Variable_Step =>
@@ -15,13 +24,15 @@ package body Expression.Evaluate is
                Result : constant Lookup_Result := Lookup.all (Variable);
             begin
                if Result.Found then
-                  return Result.Value;
+                  Stack.Append (Result.Value);
+                  return;
                else
                   raise Program_Error with "Variable not found: " & Variable;
                end if;
             end;
          when Numeric_Step =>
-            return Step.Value;
+            Stack.Append (Step.Value);
+            return;
       end case;
    end Execute_Step;
 
@@ -29,11 +40,15 @@ package body Expression.Evaluate is
       Steps : Expression.Steps.Compiled_Steps;
       Lookup : Expression.Lookup_Function
    ) return Float is
+      Stack : Evaluation_Stack := Stack_Containers.Empty_Vector;
    begin
       if Steps.Length = 0 then
          raise Program_Error with "No steps to evaluate";
       end if;
-      return Execute_Step (Steps (1), Lookup => Lookup);
+      for Step of Steps loop
+         Execute_Step (Step, Lookup => Lookup, Stack => Stack);
+      end loop;
+      return Stack (Stack.Last);
    end Evaluate_Expression;
 
 end Expression.Evaluate;
