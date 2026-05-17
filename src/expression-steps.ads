@@ -1,4 +1,5 @@
 with Ada.Strings.Unbounded;
+with Ada.Containers.Indefinite_Vectors;
 
 private package Expression.Steps is
    use Ada.Strings.Unbounded;
@@ -23,9 +24,11 @@ private package Expression.Steps is
    function Create_Numeric_Step (Number : Float) return Compiled_Step is
       (Kind => Numeric_Step, Value => Number);
 
-   function Execute_Step  (
-      Step   : Compiled_Step;
-      Lookup : Expression.Lookup_Function
-   ) return Float;
+   package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
+      Index_Type   => Positive,
+      Element_Type => Compiled_Step
+   );
+
+   subtype Compiled_Steps is Steps_Vectors.Vector;
 
 end Expression.Steps;

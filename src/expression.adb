@@ -1,17 +1,12 @@
-with Ada.Containers.Indefinite_Vectors;
 with Expression.Steps;
+with Expression.Evaluate;
 
 package body Expression is
    use Expression.Steps;
 
-   package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
-      Index_Type   => Positive,
-      Element_Type => Compiled_Step
-   );
-
    type Expression_Data is
    record
-      Steps : Steps_Vectors.Vector;
+      Steps : Compiled_Steps;
    end record;
 
    function Is_Digit (C : Character) return Boolean is
@@ -47,7 +42,7 @@ package body Expression is
       Expr.Data.Steps.Append (Create_Variable_Step (Source));
    end Compile;
 
-   function Evaluate (
+   function Eval (
       Expr    : Compiled_Expression;
       Lookup  : Lookup_Function
    ) return Float is begin
@@ -55,6 +50,6 @@ package body Expression is
          raise Program_Error with "Expression not compiled";
       end if;
 
-      return Execute_Step (Expr.Data.Steps (1), Lookup => Lookup);
-   end Evaluate;
+      return Expression.Evaluate.Evaluate_Expression (Expr.Data.Steps, Lookup => Lookup);
+   end Eval;
 end Expression;

@@ -37,7 +37,7 @@ package body Test_Expression is
       Compile ("var1", Compiled);
       Assert (Is_Compiled (Compiled), "should be compiled");
 
-      Result := Evaluate (Compiled, Test_Lookup'Access);
+      Result := Eval (Compiled, Test_Lookup'Access);
       Assert_Equal (Result, 10.0, "should evaluate to the variable's value");
    end Test_Variable_Expression;
 
@@ -51,7 +51,7 @@ package body Test_Expression is
       Compile ("314", Compiled);
       Assert (Is_Compiled (Compiled), "should be compiled");
 
-      Result := Evaluate (Compiled, Test_Lookup'Access);
+      Result := Eval (Compiled, Test_Lookup'Access);
       Assert_Equal (Result, 314.0, "should evaluate to the number's value");
    end Test_Numeric_Expression;
 

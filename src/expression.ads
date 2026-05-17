@@ -22,7 +22,7 @@ package Expression is
       Expr   : in out Compiled_Expression
    );
 
-   function Evaluate (
+   function Eval (
       Expr    : Compiled_Expression;
       Lookup  : Lookup_Function
    ) return Float;
