@@ -25,14 +25,11 @@ package body Expression.Evaluate is
             begin
                if Result.Found then
                   Stack.Append (Result.Value);
-                  return;
                else
                   raise Program_Error with "Variable not found: " & Variable;
                end if;
             end;
-         when Numeric_Step =>
-            Stack.Append (Step.Value);
-            return;
+         when Numeric_Step => Stack.Append (Step.Value);
       end case;
    end Execute_Step;
 
