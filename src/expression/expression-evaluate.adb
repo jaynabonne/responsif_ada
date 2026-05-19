@@ -3,6 +3,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
 with Ada.Containers.Vectors;
 
+with Fuzzy; use Fuzzy;
+
 package body Expression.Evaluate is
    package Stack_Containers is new Ada.Containers.Vectors (
       Index_Type   => Natural,
@@ -16,6 +18,13 @@ package body Expression.Evaluate is
       Lookup : Expression.Lookup_Function;
       Stack  : in out Evaluation_Stack
    ) is
+      function Pop (S : in out Evaluation_Stack) return Float is
+         Top : constant Float := S (S.Last);
+      begin
+         S.Delete_Last;
+         return Top;
+      end Pop;
+
    begin
       case Step.Kind is
          when Variable_Step =>
@@ -30,6 +39,16 @@ package body Expression.Evaluate is
                end if;
             end;
          when Numeric_Step => Stack.Append (Step.Value);
+         when Not_Step =>
+            Stack.Append (Fuzzy_Not (Pop (Stack)));
+         when Un_Step =>
+            Stack.Append (Fuzzy_Un (Pop (Stack)));
+         when More_Step =>
+            Stack.Append (Fuzzy_More (Pop (Stack)));
+         when Less_Step =>
+            Stack.Append (Fuzzy_Less (Pop (Stack)));
+         when others =>
+            Stack.Append (-1.0);
       end case;
    end Execute_Step;
 
