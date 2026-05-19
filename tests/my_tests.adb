@@ -1,6 +1,7 @@
 with AUnit.Test_Suites;
 with Test_Fuzzy;
 with Test_Expression;
+with Expression.Test_Evaluate;
 
 package body My_Tests is
 
@@ -10,7 +11,7 @@ package body My_Tests is
    begin
       Result.Add_Test (new Test_Fuzzy.Test_Case);
       Result.Add_Test (new Test_Expression.Test_Case);
-
+      Result.Add_Test (new Expression.Test_Evaluate.Test_Case);
       return Result;
    end Suite;
 
