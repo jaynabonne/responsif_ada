@@ -47,6 +47,51 @@ package body Expression.Evaluate is
             Stack.Append (Fuzzy_More (Pop (Stack)));
          when Less_Step =>
             Stack.Append (Fuzzy_Less (Pop (Stack)));
+         when Unary_Minus_Step =>
+            Stack.Append (-Pop (Stack));
+         when Unary_Plus_Step =>
+            Stack.Append (Pop (Stack));
+         when Multiply_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Left * Right);
+               end;
+         when Divide_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  if Right = 0.0 then
+                     raise Program_Error with "Division by zero in Divide";
+                  end if;
+                  Stack.Append (Left / Right);
+               end;
+         when Mod_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  if Right = 0.0 then
+                     raise Program_Error with "Division by zero in Mod";
+                  end if;
+                  Stack.Append (Left - Right * Float'Floor (Left / Right));
+               end;
+         when Fuzzy_Mod_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Fuzzy.Fuzzy_Mod (Left, Right));
+               end;
+         when Fuzzy_Rem_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Fuzzy.Fuzzy_Rem (Left, Right));
+               end;
          when others =>
             Stack.Append (-1.0);
       end case;

@@ -10,7 +10,14 @@ private package Expression.Steps is
       Not_Step,
       Un_Step,
       More_Step,
-      Less_Step
+      Less_Step,
+      Unary_Minus_Step,
+      Unary_Plus_Step,
+      Multiply_Step,
+      Divide_Step,
+      Mod_Step,
+      Fuzzy_Mod_Step,
+      Fuzzy_Rem_Step
    );
 
    type Compiled_Step (Kind : Compiled_Step_Kind) is record
@@ -19,10 +26,7 @@ private package Expression.Steps is
             Name : Unbounded_String := Null_Unbounded_String;
          when Numeric_Step =>
             Value : Float := 0.0;
-         when Not_Step => null;
-         when Un_Step => null;
-         when More_Step => null;
-         when Less_Step => null;
+         when others => null;
       end case;
    end record;
 
@@ -43,6 +47,27 @@ private package Expression.Steps is
 
    function Create_Less_Step return Compiled_Step is
       (Kind => Less_Step);
+
+   function Create_Unary_Minus_Step return Compiled_Step is
+      (Kind => Unary_Minus_Step);
+
+   function Create_Unary_Plus_Step return Compiled_Step is
+      (Kind => Unary_Plus_Step);
+
+   function Create_Multiply_Step return Compiled_Step is
+      (Kind => Multiply_Step);
+
+   function Create_Divide_Step return Compiled_Step is
+      (Kind => Divide_Step);
+
+   function Create_Mod_Step return Compiled_Step is
+      (Kind => Mod_Step);
+
+   function Create_Fuzzy_Mod_Step return Compiled_Step is
+      (Kind => Fuzzy_Mod_Step);
+
+   function Create_Fuzzy_Rem_Step return Compiled_Step is
+      (Kind => Fuzzy_Rem_Step);
 
    package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
       Index_Type   => Positive,

@@ -100,6 +100,109 @@ package body Expression.Test_Evaluate is
       Assert_Equal (Result, Fuzzy_Less (0.5), "should evaluate fuzzy less");
    end Test_Evaluate_Less_Expression;
 
+   procedure Test_Evaluate_Unary_Minus_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
+      Steps.Append (Expression.Steps.Create_Unary_Minus_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, -5.0, "should evaluate unary minus");
+   end Test_Evaluate_Unary_Minus_Expression;
+
+   procedure Test_Evaluate_Unary_Plus_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
+      Steps.Append (Expression.Steps.Create_Unary_Plus_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 5.0, "should evaluate unary plus");
+   end Test_Evaluate_Unary_Plus_Expression;
+
+   procedure Test_Evaluate_Multiply_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
+      Steps.Append (Expression.Steps.Create_Multiply_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 30.0, "should evaluate multiply");
+   end Test_Evaluate_Multiply_Expression;
+
+   procedure Test_Evaluate_Divide_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (30.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
+      Steps.Append (Expression.Steps.Create_Divide_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 5.0, "should evaluate divide");
+   end Test_Evaluate_Divide_Expression;
+
+   procedure Test_Evaluate_Mod_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (12.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
+      Steps.Append (Expression.Steps.Create_Mod_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 2.0, "should evaluate mod");
+   end Test_Evaluate_Mod_Expression;
+
+   procedure Test_Evaluate_Fuzzy_Mod_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.25));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.6));
+      Steps.Append (Expression.Steps.Create_Fuzzy_Mod_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, Fuzzy.Fuzzy_Mod (0.25, 0.6), "should evaluate fuzzy mod");
+   end Test_Evaluate_Fuzzy_Mod_Expression;
+
+   procedure Test_Evaluate_Fuzzy_Rem_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.25));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.6));
+      Steps.Append (Expression.Steps.Create_Fuzzy_Rem_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, Fuzzy.Fuzzy_Rem (0.25, 0.6), "should evaluate fuzzy rem");
+   end Test_Evaluate_Fuzzy_Rem_Expression;
+   --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
    begin
@@ -127,7 +230,34 @@ package body Expression.Test_Evaluate is
          T, Test_Evaluate_Less_Expression'Access,
          "Evaluates a compiled less expression"
       );
-
+      Register_Routine (
+         T, Test_Evaluate_Unary_Minus_Expression'Access,
+         "Evaluates a compiled unary minus expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Unary_Plus_Expression'Access,
+         "Evaluates a compiled unary plus expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Multiply_Expression'Access,
+         "Evaluates a compiled multiply expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Divide_Expression'Access,
+         "Evaluates a compiled divide expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Mod_Expression'Access,
+         "Evaluates a compiled mod expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Fuzzy_Mod_Expression'Access,
+         "Evaluates a compiled fuzzy mod expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Fuzzy_Rem_Expression'Access,
+         "Evaluates a compiled fuzzy rem expression"
+      );
    end Register_Tests;
 
    overriding function Name
