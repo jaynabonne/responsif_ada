@@ -185,7 +185,9 @@ package body Expression.Test_Evaluate is
       Result := Expression.Evaluate.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
-      Assert_Equal (Result, Fuzzy.Fuzzy_Mod (0.25, 0.6), "should evaluate fuzzy mod");
+      Assert_Equal (
+         Result, Fuzzy.Fuzzy_Mod (0.25, 0.6), "should evaluate fuzzy mod"
+      );
    end Test_Evaluate_Fuzzy_Mod_Expression;
 
    procedure Test_Evaluate_Fuzzy_Rem_Expression
@@ -200,8 +202,42 @@ package body Expression.Test_Evaluate is
       Result := Expression.Evaluate.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
-      Assert_Equal (Result, Fuzzy.Fuzzy_Rem (0.25, 0.6), "should evaluate fuzzy rem");
+      Assert_Equal (
+         Result, Fuzzy.Fuzzy_Rem (0.25, 0.6), "should evaluate fuzzy rem"
+      );
    end Test_Evaluate_Fuzzy_Rem_Expression;
+
+   procedure Test_Evaluate_Add_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
+      Steps.Append (Expression.Steps.Create_Add_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 11.0, "should evaluate add");
+   end Test_Evaluate_Add_Expression;
+
+   procedure Test_Evaluate_Subtract_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (8.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
+      Steps.Append (Expression.Steps.Create_Subtract_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (Result, 2.0, "should evaluate subtract");
+   end Test_Evaluate_Subtract_Expression;
+
+
    --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
@@ -257,6 +293,14 @@ package body Expression.Test_Evaluate is
       Register_Routine (
          T, Test_Evaluate_Fuzzy_Rem_Expression'Access,
          "Evaluates a compiled fuzzy rem expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Add_Expression'Access,
+         "Evaluates a compiled add expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Subtract_Expression'Access,
+         "Evaluates a compiled subtract expression"
       );
    end Register_Tests;
 

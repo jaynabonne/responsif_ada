@@ -92,6 +92,20 @@ package body Expression.Evaluate is
                begin
                   Stack.Append (Fuzzy.Fuzzy_Rem (Left, Right));
                end;
+         when Add_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Left + Right);
+               end;
+         when Subtract_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Left - Right);
+               end;
          when others =>
             Stack.Append (-1.0);
       end case;
