@@ -237,6 +237,131 @@ package body Expression.Test_Evaluate is
       Assert_Equal (Result, 2.0, "should evaluate subtract");
    end Test_Evaluate_Subtract_Expression;
 
+   procedure Test_Evaluate_Fuzzy_Difference_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.7));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.4));
+      Steps.Append (Expression.Steps.Create_Fuzzy_Difference_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, Fuzzy.Fuzzy_Difference (0.7, 0.4),
+         "should evaluate fuzzy difference"
+      );
+   end Test_Evaluate_Fuzzy_Difference_Expression;
+
+   procedure Test_Greater_Than (Left : Float; Right : Float; Msg : String) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Greater_Than_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, (if Left > Right then 1.0 else 0.0),
+         Msg
+      );
+   end Test_Greater_Than;
+
+   procedure Test_Evaluate_Greater_Than_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Greater_Than (0.7, 0.4, "should evaluate 0.7 > 0.4");
+      Test_Greater_Than (0.7, 0.7, "should evaluate 0.7 > 0.7");
+      Test_Greater_Than (0.4, 0.7, "should evaluate 0.4 > 0.7");
+   end Test_Evaluate_Greater_Than_Expression;
+
+   procedure Test_Greater_Than_Or_Equal (
+      Left : Float;
+      Right : Float;
+      Msg : String
+   ) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Greater_Than_Or_Equal_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, (if Left >= Right then 1.0 else 0.0),
+         Msg
+      );
+   end Test_Greater_Than_Or_Equal;
+
+   procedure Test_Evaluate_Greater_Than_Or_Equal_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Greater_Than_Or_Equal (0.7, 0.4, "should evaluate 0.7 >= 0.4");
+      Test_Greater_Than_Or_Equal (0.7, 0.7, "should evaluate 0.7 >= 0.7");
+      Test_Greater_Than_Or_Equal (0.4, 0.7, "should evaluate 0.4 >= 0.7");
+   end Test_Evaluate_Greater_Than_Or_Equal_Expression;
+
+   procedure Test_Less_Than (Left : Float; Right : Float; Msg : String) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Less_Than_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, (if Left < Right then 1.0 else 0.0),
+         Msg
+      );
+   end Test_Less_Than;
+
+   procedure Test_Evaluate_Less_Than_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Less_Than (0.4, 0.7, "should evaluate 0.4 < 0.7");
+      Test_Less_Than (0.7, 0.7, "should evaluate 0.7 < 0.7");
+      Test_Less_Than (0.7, 0.4, "should evaluate 0.7 < 0.4");
+   end Test_Evaluate_Less_Than_Expression;
+
+   procedure Test_Less_Than_Or_Equal (
+      Left : Float;
+      Right : Float;
+      Msg : String
+   ) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Less_Than_Or_Equal_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, (if Left <= Right then 1.0 else 0.0),
+         Msg
+      );
+   end Test_Less_Than_Or_Equal;
+
+   procedure Test_Evaluate_Less_Than_Or_Equal_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Less_Than_Or_Equal (0.4, 0.7, "should evaluate 0.4 <= 0.7");
+      Test_Less_Than_Or_Equal (0.7, 0.7, "should evaluate 0.7 <= 0.7");
+      Test_Less_Than_Or_Equal (0.7, 0.4, "should evaluate 0.7 <= 0.4");
+   end Test_Evaluate_Less_Than_Or_Equal_Expression;
 
    --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
@@ -301,6 +426,26 @@ package body Expression.Test_Evaluate is
       Register_Routine (
          T, Test_Evaluate_Subtract_Expression'Access,
          "Evaluates a compiled subtract expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Fuzzy_Difference_Expression'Access,
+         "Evaluates a compiled fuzzy difference expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Greater_Than_Expression'Access,
+         "Evaluates a compiled greater than expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Greater_Than_Or_Equal_Expression'Access,
+         "Evaluates a compiled greater than or equal expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Less_Than_Expression'Access,
+         "Evaluates a compiled less than expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Less_Than_Or_Equal_Expression'Access,
+         "Evaluates a compiled less than or equal expression"
       );
    end Register_Tests;
 

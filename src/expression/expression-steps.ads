@@ -19,7 +19,12 @@ private package Expression.Steps is
       Fuzzy_Mod_Step,
       Fuzzy_Rem_Step,
       Add_Step,
-      Subtract_Step
+      Subtract_Step,
+      Fuzzy_Difference_Step,
+      Greater_Than_Step,
+      Greater_Than_Or_Equal_Step,
+      Less_Than_Step,
+      Less_Than_Or_Equal_Step
    );
 
    type Compiled_Step (Kind : Compiled_Step_Kind) is record
@@ -76,6 +81,21 @@ private package Expression.Steps is
 
    function Create_Subtract_Step return Compiled_Step is
       (Kind => Subtract_Step);
+
+   function Create_Fuzzy_Difference_Step return Compiled_Step is
+      (Kind => Fuzzy_Difference_Step);
+
+   function Create_Greater_Than_Step return Compiled_Step is
+      (Kind => Greater_Than_Step);
+
+   function Create_Greater_Than_Or_Equal_Step return Compiled_Step is
+      (Kind => Greater_Than_Or_Equal_Step);
+
+   function Create_Less_Than_Step return Compiled_Step is
+      (Kind => Less_Than_Step);
+
+   function Create_Less_Than_Or_Equal_Step return Compiled_Step is
+      (Kind => Less_Than_Or_Equal_Step);
 
    package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
       Index_Type   => Positive,
