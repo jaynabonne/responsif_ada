@@ -162,6 +162,20 @@ package body Expression.Evaluate is
                begin
                   Stack.Append (if Left /= Right then 1.0 else 0.0);
                end;
+         when And_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Fuzzy_And (Left, Right));
+               end;
+         when Or_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Fuzzy_Or (Left, Right));
+               end;
          when others =>
             Stack.Append (-1.0);
       end case;

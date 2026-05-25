@@ -50,12 +50,12 @@ package body Expression.Test_Evaluate is
       Steps : Expression.Steps.Compiled_Steps;
       Result : Float;
    begin
-      Steps.Append (Expression.Steps.Create_Numeric_Step (0.0));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (0.2));
       Steps.Append (Expression.Steps.Create_Not_Step);
       Result := Expression.Evaluate.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
-      Assert_Equal (Result, Fuzzy_Not (0.0), "should evaluate fuzzy not");
+      Assert_Equal (Result, Fuzzy_Not (0.2), "should evaluate fuzzy not");
    end Test_Evaluate_Not_Expression;
 
    procedure Test_Evaluate_Un_Expression
@@ -450,6 +450,68 @@ package body Expression.Test_Evaluate is
       Test_Not_Equals (0.7, 0.4, "should evaluate 0.7 not equals 0.4");
    end Test_Evaluate_Not_Equals_Expression;
 
+   procedure Test_And (
+      Left : Float;
+      Right : Float;
+      Msg : String
+   ) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_And_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, Fuzzy_And (Left, Right),
+         Msg
+      );
+   end Test_And;
+
+   procedure Test_Evaluate_And_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_And (0.0, 0.0, "should evaluate 0.0 and 0.0");
+      Test_And (0.0, 1.0, "should evaluate 0.0 and 1.0");
+      Test_And (0.5, 0.5, "should evaluate 0.5 and 0.5");
+      Test_And (1.0, 0.0, "should evaluate 1.0 and 0.0");
+      Test_And (1.0, 1.0, "should evaluate 1.0 and 1.0");
+   end Test_Evaluate_And_Expression;
+
+   procedure Test_Or (
+      Left : Float;
+      Right : Float;
+      Msg : String
+   ) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Or_Step);
+      Result := Expression.Evaluate.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, Fuzzy_Or (Left, Right),
+         Msg
+      );
+   end Test_Or;
+
+   procedure Test_Evaluate_Or_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Or (0.0, 0.0, "should evaluate 0.0 or 0.0");
+      Test_Or (0.0, 1.0, "should evaluate 0.0 or 1.0");
+      Test_Or (0.5, 0.5, "should evaluate 0.5 or 0.5");
+      Test_Or (1.0, 0.0, "should evaluate 1.0 or 0.0");
+      Test_Or (1.0, 1.0, "should evaluate 1.0 or 1.0");
+   end Test_Evaluate_Or_Expression;
+
    --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
@@ -545,6 +607,14 @@ package body Expression.Test_Evaluate is
       Register_Routine (
          T, Test_Evaluate_Not_Equals_Expression'Access,
          "Evaluates a compiled not equals expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_And_Expression'Access,
+         "Evaluates a compiled and expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Or_Expression'Access,
+         "Evaluates a compiled or expression"
       );
    end Register_Tests;
 
