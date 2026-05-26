@@ -3,7 +3,7 @@ with Test_Fuzzy;
 with Test_Expression;
 with Expression.Test_Evaluate;
 
-package body My_Tests is
+package body Test_Suite is
 
    function Suite return AUnit.Test_Suites.Access_Test_Suite is
       Result : constant AUnit.Test_Suites.Access_Test_Suite :=
@@ -15,4 +15,4 @@ package body My_Tests is
       return Result;
    end Suite;
 
-end My_Tests;
+end Test_Suite;
