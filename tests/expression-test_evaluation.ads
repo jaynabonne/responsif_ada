@@ -1,7 +1,7 @@
 with AUnit;
 with AUnit.Test_Cases;
 
-package Expression.Test_Evaluate is
+package Expression.Test_Evaluation is
 
    type Test_Case is new AUnit.Test_Cases.Test_Case with null record;
 
@@ -10,4 +10,4 @@ package Expression.Test_Evaluate is
    overriding function Name
      (T : Test_Case) return AUnit.Message_String;
 
-end Expression.Test_Evaluate;
+end Expression.Test_Evaluation;

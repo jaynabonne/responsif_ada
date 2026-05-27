@@ -5,7 +5,7 @@ with Ada.Containers.Vectors;
 
 with Fuzzy; use Fuzzy;
 
-package body Expression.Evaluate is
+package body Expression.Evaluation is
    package Stack_Containers is new Ada.Containers.Vectors (
       Index_Type   => Natural,
       Element_Type => Float
@@ -176,8 +176,9 @@ package body Expression.Evaluate is
                begin
                   Stack.Append (Fuzzy_Or (Left, Right));
                end;
-         when others =>
-            Stack.Append (-1.0);
+         --  For TDD red phase.
+         --  when others =>
+         --     Stack.Append (-1.0);
       end case;
    end Execute_Step;
 
@@ -196,4 +197,4 @@ package body Expression.Evaluate is
       return Stack (Stack.Last);
    end Evaluate_Expression;
 
-end Expression.Evaluate;
+end Expression.Evaluation;

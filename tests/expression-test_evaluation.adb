@@ -1,11 +1,11 @@
 with AUnit.Test_Cases; use AUnit.Test_Cases;
 with Test_Helpers; use Test_Helpers;
 
-with Expression.Evaluate; use Expression.Evaluate;
+with Expression.Evaluation; use Expression.Evaluation;
 with Expression.Steps; use Expression.Steps;
 with Fuzzy; use Fuzzy;
 
-package body Expression.Test_Evaluate is
+package body Expression.Test_Evaluation is
 
    function Test_Lookup (Name : String) return Lookup_Result is
    begin
@@ -25,7 +25,7 @@ package body Expression.Test_Evaluate is
       Result : Float;
    begin
       Steps.Append (Expression.Steps.Create_Variable_Step ("var1"));
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 10.0, "should evaluate to 10.0");
@@ -38,7 +38,7 @@ package body Expression.Test_Evaluate is
       Result : Float;
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (314.0));
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 314.0, "should evaluate to 314.0");
@@ -52,7 +52,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.2));
       Steps.Append (Expression.Steps.Create_Not_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, Fuzzy_Not (0.2), "should evaluate fuzzy not");
@@ -66,7 +66,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.5));
       Steps.Append (Expression.Steps.Create_Un_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, Fuzzy_Un (0.5), "should evaluate fuzzy un");
@@ -80,7 +80,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.5));
       Steps.Append (Expression.Steps.Create_More_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, Fuzzy_More (0.5), "should evaluate fuzzy more");
@@ -94,7 +94,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.5));
       Steps.Append (Expression.Steps.Create_Less_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, Fuzzy_Less (0.5), "should evaluate fuzzy less");
@@ -108,7 +108,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
       Steps.Append (Expression.Steps.Create_Unary_Minus_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, -5.0, "should evaluate unary minus");
@@ -122,7 +122,7 @@ package body Expression.Test_Evaluate is
    begin
       Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
       Steps.Append (Expression.Steps.Create_Unary_Plus_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 5.0, "should evaluate unary plus");
@@ -137,7 +137,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
       Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
       Steps.Append (Expression.Steps.Create_Multiply_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 30.0, "should evaluate multiply");
@@ -152,7 +152,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (30.0));
       Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
       Steps.Append (Expression.Steps.Create_Divide_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 5.0, "should evaluate divide");
@@ -167,7 +167,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (12.0));
       Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
       Steps.Append (Expression.Steps.Create_Mod_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 2.0, "should evaluate mod");
@@ -182,7 +182,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.25));
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.6));
       Steps.Append (Expression.Steps.Create_Fuzzy_Mod_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -199,7 +199,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.25));
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.6));
       Steps.Append (Expression.Steps.Create_Fuzzy_Rem_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -216,7 +216,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (5.0));
       Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
       Steps.Append (Expression.Steps.Create_Add_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 11.0, "should evaluate add");
@@ -231,7 +231,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (8.0));
       Steps.Append (Expression.Steps.Create_Numeric_Step (6.0));
       Steps.Append (Expression.Steps.Create_Subtract_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (Result, 2.0, "should evaluate subtract");
@@ -246,7 +246,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.7));
       Steps.Append (Expression.Steps.Create_Numeric_Step (0.4));
       Steps.Append (Expression.Steps.Create_Fuzzy_Difference_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -262,7 +262,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Greater_Than_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -291,7 +291,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Greater_Than_Or_Equal_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -316,7 +316,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Less_Than_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -345,7 +345,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Less_Than_Or_Equal_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -374,7 +374,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Fuzzy_Equals_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -403,7 +403,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Equals_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -432,7 +432,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Not_Equals_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -461,7 +461,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_And_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -492,7 +492,7 @@ package body Expression.Test_Evaluate is
       Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
       Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
       Steps.Append (Expression.Steps.Create_Or_Step);
-      Result := Expression.Evaluate.Evaluate_Expression (
+      Result := Expression.Evaluation.Evaluate_Expression (
          Steps, Test_Lookup'Access
       );
       Assert_Equal (
@@ -622,7 +622,7 @@ package body Expression.Test_Evaluate is
      (T : Test_Case with Unreferenced) return AUnit.Message_String
    is
    begin
-      return AUnit.Format ("Expression tests");
+      return AUnit.Format ("Expression evaluation tests");
    end Name;
 
-end Expression.Test_Evaluate;
+end Expression.Test_Evaluation;

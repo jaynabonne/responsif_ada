@@ -1,5 +1,5 @@
 with Expression.Steps;
-with Expression.Evaluate;
+with Expression.Evaluation;
 
 package body Expression is
    use Expression.Steps;
@@ -50,7 +50,7 @@ package body Expression is
          raise Program_Error with "Expression not compiled";
       end if;
 
-      return Expression.Evaluate.Evaluate_Expression (
+      return Expression.Evaluation.Evaluate_Expression (
          Expr.Data.Steps,
          Lookup => Lookup
       );
