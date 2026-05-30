@@ -6,39 +6,32 @@ package body Expression.Compilation is
    type Token_Type is (None, Space, Identifier, Special);
 
    function Is_Identifier (C : Character) return Boolean is
-   begin
-      return
-         (C in 'A' .. 'Z') or else
+      ((C in 'A' .. 'Z') or else
          (C in 'a' .. 'z') or else
          (C in '0' .. '9') or else
-         (C in '_' | '.' | '$' | ':');
-   end Is_Identifier;
+         (C in '_' | '.' | '$' | ':'));
 
    function Is_Space (C : Character) return Boolean is
-   begin
-      return C = ' ';
-   end Is_Space;
+      (C = ' ');
 
    function Type_Of (C : Character) return Token_Type is
-   begin
+   (
       if Is_Space (C) then
-         return Space;
+         Space
       elsif Is_Identifier (C) then
-         return Identifier;
+         Identifier
       else
-         return Special;
-      end if;
-   end Type_Of;
+          Special
+   );
 
    function Components_Of (Source : String)
-         return Component_Vectors.Vector
-   is
+         return Component_Vectors.Vector is
+
       Result : Component_Vectors.Vector;
       Token : Unbounded_String;
       Current_Type : Token_Type := None;
 
-      procedure Flush_Part
-      is
+      procedure Flush_Part is
          S : constant String := To_String (Token);
          Trimmed : constant String := Trim (S, Ada.Strings.Both);
       begin
