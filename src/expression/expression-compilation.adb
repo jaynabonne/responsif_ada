@@ -33,7 +33,6 @@ package body Expression.Compilation is
          return Component_Vectors.Vector
    is
       Result : Component_Vectors.Vector;
-      Index : Natural := Source'First;
       Token : String (1 .. Source'Length);
       Token_Index : Natural := Token'First - 1;
       Current_Type : Token_Type := None;
@@ -49,17 +48,20 @@ package body Expression.Compilation is
          Token_Index := Token'First - 1;
          Current_Type := None;
       end Flush_Part;
-   begin
-      while Index <= Source'Last loop
-         if Current_Type = None then
-            Current_Type := Type_Of (Source (Index));
-         elsif Type_Of (Source (Index)) /= Current_Type then
+
+      procedure Handle_Next(C : Character) is
+         This_Type : constant Token_Type := Type_Of (C);
+      begin
+         if This_Type /= Current_Type then
             Flush_Part;
-            Current_Type := Type_Of (Source (Index));
+            Current_Type := This_Type;
          end if;
          Token_Index := Token_Index + 1;
-         Token (Token_Index) := Source (Index);
-         Index := Index + 1;
+         Token (Token_Index) := C;
+      end Handle_Next;
+   begin
+      for Index in Source'Range loop
+         Handle_Next (Source (Index));
       end loop;
       if Token_Index > 0 then
          Flush_Part;
