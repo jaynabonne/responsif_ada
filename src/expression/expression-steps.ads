@@ -5,6 +5,7 @@ private package Expression.Steps is
    use Ada.Strings.Unbounded;
 
    type Compiled_Step_Kind is (
+      No_Step,
       Variable_Step,
       Numeric_Step,
       Not_Step,
@@ -32,7 +33,7 @@ private package Expression.Steps is
       Or_Step
    );
 
-   type Compiled_Step (Kind : Compiled_Step_Kind) is record
+   type Compiled_Step (Kind : Compiled_Step_Kind := No_Step) is record
       case Kind is
          when Variable_Step =>
             Name : Unbounded_String := Null_Unbounded_String;

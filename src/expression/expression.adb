@@ -15,6 +15,9 @@ package body Expression is
       return C >= '0' and then C <= '9';
    end Is_Digit;
 
+   function Is_Operator (Component : String) return Boolean is
+      (Component = "not");
+
    ---
    ---  Public interface implementations
    ---
@@ -30,25 +33,27 @@ package body Expression is
    ) is
       Components : constant Component_Vectors.Vector :=
          Compilation.Components_Of (Source);
+      Pending_Step : Compiled_Step;
    begin
       if Components.Is_Empty then
          return;
       end if;
 
       Expr.Data := new Expression_Data;
-      declare
-         Component : constant String := Components (Components.First);
-      begin
-
-         if Is_Digit (Component (Component'First)) then
+      for Component of Components loop
+         if Is_Operator (Component) then
+            Pending_Step := Create_Not_Step;
+         elsif Is_Digit (Component (Component'First)) then
             Expr.Data.Steps.Append (
                Create_Numeric_Step (Float'Value (Component))
             );
-            return;
+         else
+            Expr.Data.Steps.Append (Create_Variable_Step (Component));
          end if;
-
-         Expr.Data.Steps.Append (Create_Variable_Step (Component));
-      end;
+      end loop;
+      if Pending_Step.Kind /= No_Step then
+         Expr.Data.Steps.Append (Pending_Step);
+      end if;
    end Compile;
 
    function Eval (

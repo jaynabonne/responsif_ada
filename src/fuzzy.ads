@@ -1,5 +1,6 @@
 package Fuzzy is
    subtype Fuzzy_Value is Float range -1.0 .. 1.0;
+   function Fuzzy_Clamp (Value : Float) return Fuzzy_Value;
    function Fuzzy_Not (A : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Un (A : Fuzzy_Value) return Fuzzy_Value;
    function Fuzzy_Equals (A, B : Fuzzy_Value) return Fuzzy_Value;

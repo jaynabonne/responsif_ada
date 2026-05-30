@@ -1,5 +1,10 @@
 package body Fuzzy is
 
+   function Fuzzy_Clamp (Value : Float) return Fuzzy_Value is
+   begin
+      return Fuzzy_Value'Min (Fuzzy_Value'Max (Value, -1.0), 1.0);
+   end Fuzzy_Clamp;
+   
    function Fuzzy_Not (A : Fuzzy_Value) return Fuzzy_Value is
    begin
       return Fuzzy_Value'Min (1.0 - A, 1.0);

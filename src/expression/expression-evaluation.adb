@@ -27,6 +27,7 @@ package body Expression.Evaluation is
 
    begin
       case Step.Kind is
+         when No_Step => null;
          when Variable_Step =>
             declare
                Variable : constant String := To_String (Step.Name);
@@ -40,7 +41,7 @@ package body Expression.Evaluation is
             end;
          when Numeric_Step => Stack.Append (Step.Value);
          when Not_Step =>
-            Stack.Append (Fuzzy_Not (Pop (Stack)));
+            Stack.Append (Fuzzy_Not (Fuzzy_Clamp (Pop (Stack))));
          when Un_Step =>
             Stack.Append (Fuzzy_Un (Pop (Stack)));
          when More_Step =>
