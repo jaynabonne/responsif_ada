@@ -1,4 +1,5 @@
 with Expression.Steps;
+with Expression.Compilation; use Expression.Compilation;
 with Expression.Evaluation;
 
 package body Expression is
@@ -27,19 +28,27 @@ package body Expression is
       Source : String;
       Expr   : in out Compiled_Expression
    ) is
+      Components : constant Component_Vectors.Vector :=
+         Compilation.Components_Of (Source);
    begin
-      if Source = "" then
+      if Components.Is_Empty then
          return;
       end if;
 
       Expr.Data := new Expression_Data;
+      declare
+         Component : constant String := Components (Components.First);
+      begin
 
-      if Is_Digit (Source (Source'First)) then
-         Expr.Data.Steps.Append (Create_Numeric_Step (Float'Value (Source)));
-         return;
-      end if;
+         if Is_Digit (Component (Component'First)) then
+            Expr.Data.Steps.Append (
+               Create_Numeric_Step (Float'Value (Component))
+            );
+            return;
+         end if;
 
-      Expr.Data.Steps.Append (Create_Variable_Step (Source));
+         Expr.Data.Steps.Append (Create_Variable_Step (Component));
+      end;
    end Compile;
 
    function Eval (
