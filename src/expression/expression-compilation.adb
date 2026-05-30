@@ -1,4 +1,5 @@
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Expression.Compilation is
 
@@ -33,39 +34,36 @@ package body Expression.Compilation is
          return Component_Vectors.Vector
    is
       Result : Component_Vectors.Vector;
-      Token : String (1 .. Source'Length);
-      Token_Index : Natural := Token'First - 1;
+      Token : Unbounded_String;
       Current_Type : Token_Type := None;
 
       procedure Flush_Part
       is
-         S : constant String := Token (Token'First .. Token_Index);
+         S : constant String := To_String (Token);
          Trimmed : constant String := Trim (S, Ada.Strings.Both);
       begin
          if Trimmed /= "" then
             Result.Append (Trimmed);
          end if;
-         Token_Index := Token'First - 1;
          Current_Type := None;
+         Token := Null_Unbounded_String;
       end Flush_Part;
 
-      procedure Handle_Next(C : Character) is
+      procedure Handle_Next (C : Character) is
          This_Type : constant Token_Type := Type_Of (C);
       begin
          if This_Type /= Current_Type then
             Flush_Part;
             Current_Type := This_Type;
          end if;
-         Token_Index := Token_Index + 1;
-         Token (Token_Index) := C;
+         Append (Token, C);
       end Handle_Next;
+
    begin
       for Index in Source'Range loop
          Handle_Next (Source (Index));
       end loop;
-      if Token_Index > 0 then
-         Flush_Part;
-      end if;
+      Flush_Part;
       return Result;
    end Components_Of;
 
