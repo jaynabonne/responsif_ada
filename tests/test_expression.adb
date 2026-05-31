@@ -13,6 +13,8 @@ package body Test_Expression is
          return (Found => True, Value => 10.0);
       elsif Name = "var2" then
          return (Found => True, Value => 5.0);
+      elsif Name = "fuzzyvar" then
+         return (Found => True, Value => 0.75);
       else
          return (Found => False);
       end if;
@@ -56,8 +58,8 @@ package body Test_Expression is
       Assert_Equal (Result, 314.0, "should evaluate to the number's value");
    end Test_Numeric_Expression;
 
-   --  Test for compiling a unary op with a variable
-   procedure Test_Unary_Op_Expression
+   --  Test for compiling not with a variable
+   procedure Test_Unary_Not_Expression
      (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
       Compiled : Compiled_Expression;
@@ -68,7 +70,21 @@ package body Test_Expression is
 
       Result := Eval (Compiled, Test_Lookup'Access);
       Assert_Equal (Result, Fuzzy_Not (1.0), "should evaluate to not the variable's value");
-   end Test_Unary_Op_Expression;
+   end Test_Unary_Not_Expression;
+
+   --  Test for compiling more with a variable
+   procedure Test_Unary_More_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+      Compiled : Compiled_Expression;
+      Result : Float;
+   begin
+      Compile ("more fuzzyvar", Compiled);
+      Assert (Is_Compiled (Compiled), "should be compiled");
+
+      Result := Eval (Compiled, Test_Lookup'Access);
+      Assert_Equal (Result, Fuzzy_More (0.75), "should evaluate to more the variable's value");
+   end Test_Unary_More_Expression;
 
 
    overriding procedure Register_Tests (T : in out Test_Case) is
@@ -87,8 +103,12 @@ package body Test_Expression is
          "Should compile a number"
       );
       Register_Routine (
-         T, Test_Unary_Op_Expression'Access,
-         "Should compile a unary op with a variable"
+         T, Test_Unary_Not_Expression'Access,
+         "Should compile not with a variable"
+      );
+      Register_Routine (
+         T, Test_Unary_More_Expression'Access,
+         "Should compile more with a variable"
       );
    end Register_Tests;
 

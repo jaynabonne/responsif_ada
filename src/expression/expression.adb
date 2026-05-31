@@ -2,8 +2,43 @@ with Expression.Steps;
 with Expression.Compilation; use Expression.Compilation;
 with Expression.Evaluation;
 
+with Ada.Containers.Indefinite_Hashed_Maps;
+with Ada.Strings.Hash;
+
 package body Expression is
    use Expression.Steps;
+
+   type Step_Factory is access function return Compiled_Step;
+
+   type Operator_Info is record
+      Precedence : Natural;
+      Unary : Boolean := False;
+      Create : Step_Factory;
+   end record;
+
+   package Operator_Maps is new Ada.Containers.Indefinite_Hashed_Maps
+   (Key_Type        => String,
+      Element_Type    => Operator_Info,
+      Hash            => Ada.Strings.Hash,
+      Equivalent_Keys => "=");
+
+   function Build_Operator_Map return Operator_Maps.Map is
+      Map : Operator_Maps.Map;
+   begin
+      Map.Insert ("not", (
+         Precedence => 3,
+         Unary => True,
+         Create => Create_Not_Step'Access)
+      );
+      Map.Insert ("more", (
+         Precedence => 3,
+         Unary => True,
+         Create => Create_More_Step'Access)
+      );
+      return Map;
+   end Build_Operator_Map;
+
+   Operator_Map : constant Operator_Maps.Map := Build_Operator_Map;
 
    type Expression_Data is
    record
@@ -11,12 +46,10 @@ package body Expression is
    end record;
 
    function Is_Digit (C : Character) return Boolean is
-   begin
-      return C >= '0' and then C <= '9';
-   end Is_Digit;
+      (C >= '0' and then C <= '9');
 
    function Is_Operator (Component : String) return Boolean is
-      (Component = "not");
+      (Operator_Map.Contains (Component));
 
    ---
    ---  Public interface implementations
@@ -42,7 +75,7 @@ package body Expression is
       Expr.Data := new Expression_Data;
       for Component of Components loop
          if Is_Operator (Component) then
-            Pending_Step := Create_Not_Step;
+            Pending_Step := Operator_Map (Component).Create.all;
          elsif Is_Digit (Component (Component'First)) then
             Expr.Data.Steps.Append (
                Create_Numeric_Step (Float'Value (Component))
