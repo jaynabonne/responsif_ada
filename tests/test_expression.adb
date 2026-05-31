@@ -1,5 +1,6 @@
 with AUnit.Assertions; use AUnit.Assertions;
 with AUnit.Test_Cases; use AUnit.Test_Cases;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Test_Helpers; use Test_Helpers;
 with Fuzzy; use Fuzzy;
 
@@ -7,6 +8,7 @@ with Expression; use Expression;
 
 package body Test_Expression is
 
+   Fuzzy_Test_Value : constant Fuzzy_Value := 0.75;
    function Test_Lookup (Name : String) return Lookup_Result is
    begin
       if Name = "var1" then
@@ -14,7 +16,7 @@ package body Test_Expression is
       elsif Name = "var2" then
          return (Found => True, Value => 5.0);
       elsif Name = "fuzzyvar" then
-         return (Found => True, Value => 0.75);
+         return (Found => True, Value => Fuzzy_Test_Value);
       else
          return (Found => False);
       end if;
@@ -30,62 +32,48 @@ package body Test_Expression is
       Assert (not Is_Compiled (Compiled), "should not be compiled");
    end Test_Uncompiled_Expression;
 
-   --  Test for compiling a variable
-   procedure Test_Variable_Expression
-     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
-   is
+   type Expression_Test_Case is record
+      Expression : Unbounded_String;
+      Expected : Float;
+   end record;
+
+   type Expression_Test_Cases is
+      array (Natural range <>) of Expression_Test_Case;
+
+   function TC (Expression : String; Expected : Float)
+      return Expression_Test_Case is
+      (Expression => To_Unbounded_String (Expression), Expected => Expected);
+
+   The_Expression_Test_Cases : constant Expression_Test_Cases := [
+      TC ("var1", 10.0),
+      TC ("314.0", 314.0),
+      TC ("not var1", Fuzzy_Not (1.0)),
+      TC ("more fuzzyvar", Fuzzy_More (Fuzzy_Test_Value))
+   ];
+
+   procedure Test_Expression (Test_Case : Expression_Test_Case) is
       Compiled : Compiled_Expression;
       Result : Float;
+      Expression : constant String := To_String (Test_Case.Expression);
    begin
-      Compile ("var1", Compiled);
+      Compile (Expression, Compiled);
       Assert (Is_Compiled (Compiled), "should be compiled");
-
       Result := Eval (Compiled, Test_Lookup'Access);
-      Assert_Equal (Result, 10.0, "should evaluate to the variable's value");
-   end Test_Variable_Expression;
+      Assert_Equal (
+         Result,
+         Test_Case.Expected,
+         "should evaluate to the expected value for " & Expression
+      );
+   end Test_Expression;
 
-   --  Test for compiling a number
-   procedure Test_Numeric_Expression
+   procedure Test_Expressions
      (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
    is
-      Compiled : Compiled_Expression;
-      Result : Float;
    begin
-      Compile ("314", Compiled);
-      Assert (Is_Compiled (Compiled), "should be compiled");
-
-      Result := Eval (Compiled, Test_Lookup'Access);
-      Assert_Equal (Result, 314.0, "should evaluate to the number's value");
-   end Test_Numeric_Expression;
-
-   --  Test for compiling not with a variable
-   procedure Test_Unary_Not_Expression
-     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
-   is
-      Compiled : Compiled_Expression;
-      Result : Float;
-   begin
-      Compile ("not var1", Compiled);
-      Assert (Is_Compiled (Compiled), "should be compiled");
-
-      Result := Eval (Compiled, Test_Lookup'Access);
-      Assert_Equal (Result, Fuzzy_Not (1.0), "should evaluate to not the variable's value");
-   end Test_Unary_Not_Expression;
-
-   --  Test for compiling more with a variable
-   procedure Test_Unary_More_Expression
-     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
-   is
-      Compiled : Compiled_Expression;
-      Result : Float;
-   begin
-      Compile ("more fuzzyvar", Compiled);
-      Assert (Is_Compiled (Compiled), "should be compiled");
-
-      Result := Eval (Compiled, Test_Lookup'Access);
-      Assert_Equal (Result, Fuzzy_More (0.75), "should evaluate to more the variable's value");
-   end Test_Unary_More_Expression;
-
+      for Test_Case of The_Expression_Test_Cases loop
+         Test_Expression (Test_Case);
+      end loop;
+   end Test_Expressions;
 
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
@@ -95,20 +83,8 @@ package body Test_Expression is
          "Does not compile an empty expression"
       );
       Register_Routine (
-         T, Test_Variable_Expression'Access,
-         "Should compile a variable"
-      );
-      Register_Routine (
-         T, Test_Numeric_Expression'Access,
-         "Should compile a number"
-      );
-      Register_Routine (
-         T, Test_Unary_Not_Expression'Access,
-         "Should compile not with a variable"
-      );
-      Register_Routine (
-         T, Test_Unary_More_Expression'Access,
-         "Should compile more with a variable"
+         T, Test_Expressions'Access,
+         "Should properly compile and evaluate various expressions"
       );
    end Register_Tests;
 
