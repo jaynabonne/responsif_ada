@@ -4,7 +4,9 @@ This is a small project to port bits of my ResponsIF framework from JavaScript t
 
 ## Running things
 -- Run app
+
 alr run responsif_ada
 
 -- Run tests
+
 alr run test_runner
