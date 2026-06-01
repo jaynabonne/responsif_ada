@@ -48,7 +48,10 @@ package body Test_Expression is
       TC ("var1", 10.0),
       TC ("314.0", 314.0),
       TC ("not var1", Fuzzy_Not (1.0)),
-      TC ("more fuzzyvar", Fuzzy_More (Fuzzy_Test_Value))
+      TC ("un fuzzyvar", Fuzzy_Un (Fuzzy_Test_Value)),
+      TC ("more fuzzyvar", Fuzzy_More (Fuzzy_Test_Value)),
+      TC ("less fuzzyvar", Fuzzy_Less (Fuzzy_Test_Value)),
+      TC ("not not var1", Fuzzy_Not (Fuzzy_Not (1.0)))
    ];
 
    procedure Test_Expression (Test_Case : Expression_Test_Case) is

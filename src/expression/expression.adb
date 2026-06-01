@@ -1,3 +1,4 @@
+with Ada.Containers.Indefinite_Vectors;
 with Expression.Steps;
 with Expression.Compilation; use Expression.Compilation;
 with Expression.Evaluation;
@@ -22,23 +23,39 @@ package body Expression is
       Hash            => Ada.Strings.Hash,
       Equivalent_Keys => "=");
 
+   package Step_Vectors is new Ada.Containers.Indefinite_Vectors
+   (Index_Type       => Natural,
+      Element_Type    => Compiled_Step);
+
    function Build_Operator_Map return Operator_Maps.Map is
       Map : Operator_Maps.Map;
    begin
       Map.Insert ("not", (
-         Precedence => 3,
+         Precedence => 1,
          Unary => True,
          Create => Create_Not_Step'Access)
       );
+      Map.Insert ("un", (
+         Precedence => 1,
+         Unary => True,
+         Create => Create_Un_Step'Access)
+      );
       Map.Insert ("more", (
-         Precedence => 3,
+         Precedence => 1,
          Unary => True,
          Create => Create_More_Step'Access)
+      );
+      Map.Insert ("less", (
+         Precedence => 1,
+         Unary => True,
+         Create => Create_Less_Step'Access)
       );
       return Map;
    end Build_Operator_Map;
 
    Operator_Map : constant Operator_Maps.Map := Build_Operator_Map;
+
+   Pending_Operators : Step_Vectors.Vector;
 
    type Expression_Data is
    record
@@ -66,7 +83,15 @@ package body Expression is
    ) is
       Components : constant Component_Vectors.Vector :=
          Compilation.Components_Of (Source);
-      Pending_Step : Compiled_Step;
+
+      procedure Push_Remaining_Operators is
+      begin
+         while not Pending_Operators.Is_Empty loop
+            Expr.Data.Steps.Append (Pending_Operators (Pending_Operators.Last));
+            Pending_Operators.Delete_Last;
+         end loop;
+      end Push_Remaining_Operators;
+
    begin
       if Components.Is_Empty then
          return;
@@ -75,7 +100,7 @@ package body Expression is
       Expr.Data := new Expression_Data;
       for Component of Components loop
          if Is_Operator (Component) then
-            Pending_Step := Operator_Map (Component).Create.all;
+            Pending_Operators.Append (Operator_Map (Component).Create.all);
          elsif Is_Digit (Component (Component'First)) then
             Expr.Data.Steps.Append (
                Create_Numeric_Step (Float'Value (Component))
@@ -84,9 +109,7 @@ package body Expression is
             Expr.Data.Steps.Append (Create_Variable_Step (Component));
          end if;
       end loop;
-      if Pending_Step.Kind /= No_Step then
-         Expr.Data.Steps.Append (Pending_Step);
-      end if;
+      Push_Remaining_Operators;
    end Compile;
 
    function Eval (
