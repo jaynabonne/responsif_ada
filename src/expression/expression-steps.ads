@@ -30,7 +30,8 @@ private package Expression.Steps is
       Equals_Step,
       Not_Equals_Step,
       And_Step,
-      Or_Step
+      Or_Step,
+      Xor_Step
    );
 
    type Compiled_Step (Kind : Compiled_Step_Kind := No_Step) is record
@@ -117,6 +118,9 @@ private package Expression.Steps is
 
    function Create_Or_Step return Compiled_Step is
       (Kind => Or_Step);
+
+   function Create_Xor_Step return Compiled_Step is
+      (Kind => Xor_Step);
 
    package Steps_Vectors is new Ada.Containers.Indefinite_Vectors (
       Index_Type   => Positive,

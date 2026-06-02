@@ -177,6 +177,13 @@ package body Expression.Evaluation is
                begin
                   Stack.Append (Fuzzy_Or (Left, Right));
                end;
+         when Xor_Step =>
+               declare
+                  Right : constant Float := Pop (Stack);
+                  Left : constant Float := Pop (Stack);
+               begin
+                  Stack.Append (Fuzzy_Xor (Left, Right));
+               end;
          --  For TDD red phase.
          --  when others =>
          --     Stack.Append (-1.0);

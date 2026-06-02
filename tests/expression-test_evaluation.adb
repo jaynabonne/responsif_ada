@@ -512,6 +512,38 @@ package body Expression.Test_Evaluation is
       Test_Or (1.0, 1.0, "should evaluate 1.0 or 1.0");
    end Test_Evaluate_Or_Expression;
 
+   procedure Test_Xor (
+      Left : Float;
+      Right : Float;
+      Msg : String
+   ) is
+      Steps : Expression.Steps.Compiled_Steps;
+      Result : Float;
+   begin
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Left));
+      Steps.Append (Expression.Steps.Create_Numeric_Step (Right));
+      Steps.Append (Expression.Steps.Create_Xor_Step);
+      Result := Expression.Evaluation.Evaluate_Expression (
+         Steps, Test_Lookup'Access
+      );
+      Assert_Equal (
+         Result, Fuzzy_Xor (Left, Right),
+         Msg
+      );
+   end Test_Xor;
+
+   procedure Test_Evaluate_Xor_Expression
+     (T : in out AUnit.Test_Cases.Test_Case'Class with Unreferenced)
+   is
+   begin
+      Test_Xor (0.0, 0.0, "should evaluate 0.0 xor 0.0");
+      Test_Xor (0.0, 1.0, "should evaluate 0.0 xor 1.0");
+      Test_Xor (0.5, 0.5, "should evaluate 0.5 xor 0.5");
+      Test_Xor (1.0, 0.0, "should evaluate 1.0 xor 0.0");
+      Test_Xor (1.0, 1.0, "should evaluate 1.0 xor 1.0");
+   end Test_Evaluate_Xor_Expression;
+
+
    --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;
@@ -615,6 +647,10 @@ package body Expression.Test_Evaluation is
       Register_Routine (
          T, Test_Evaluate_Or_Expression'Access,
          "Evaluates a compiled or expression"
+      );
+      Register_Routine (
+         T, Test_Evaluate_Xor_Expression'Access,
+         "Evaluates a compiled xor expression"
       );
    end Register_Tests;
 

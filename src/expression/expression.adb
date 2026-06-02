@@ -50,6 +50,21 @@ package body Expression is
          Unary => True,
          Create => Create_Less_Step'Access)
       );
+      Map.Insert ("and", (
+         Precedence => 2,
+         Unary => False,
+         Create => Create_And_Step'Access)
+      );
+      Map.Insert ("or", (
+         Precedence => 2,
+         Unary => False,
+         Create => Create_Or_Step'Access)
+      );
+      Map.Insert ("xor", (
+         Precedence => 2,
+         Unary => False,
+         Create => Create_Xor_Step'Access)
+      );
       return Map;
    end Build_Operator_Map;
 
