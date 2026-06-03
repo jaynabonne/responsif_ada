@@ -5,6 +5,7 @@ with Expression.Evaluation;
 
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
+--  with Ada.Text_IO; use Ada.Text_IO;
 
 package body Expression is
    use Expression.Steps;
@@ -30,38 +31,38 @@ package body Expression is
    function Build_Operator_Map return Operator_Maps.Map is
       Map : Operator_Maps.Map;
    begin
-      Map.Insert ("not", (
+      Map.Insert ("unary not", (
          Precedence => 1,
          Unary => True,
          Create => Create_Not_Step'Access)
       );
-      Map.Insert ("un", (
+      Map.Insert ("unary un", (
          Precedence => 1,
          Unary => True,
          Create => Create_Un_Step'Access)
       );
-      Map.Insert ("more", (
+      Map.Insert ("unary more", (
          Precedence => 1,
          Unary => True,
          Create => Create_More_Step'Access)
       );
-      Map.Insert ("less", (
+      Map.Insert ("unary less", (
          Precedence => 1,
          Unary => True,
          Create => Create_Less_Step'Access)
       );
       Map.Insert ("and", (
-         Precedence => 2,
+         Precedence => 11,
          Unary => False,
          Create => Create_And_Step'Access)
       );
       Map.Insert ("or", (
-         Precedence => 2,
+         Precedence => 12,
          Unary => False,
          Create => Create_Or_Step'Access)
       );
       Map.Insert ("xor", (
-         Precedence => 2,
+         Precedence => 12,
          Unary => False,
          Create => Create_Xor_Step'Access)
       );
@@ -81,7 +82,8 @@ package body Expression is
       (C >= '0' and then C <= '9');
 
    function Is_Operator (Component : String) return Boolean is
-      (Operator_Map.Contains (Component));
+      (Operator_Map.Contains (Component) or else
+      Operator_Map.Contains ("unary " & Component));
 
    ---
    ---  Public interface implementations
@@ -99,13 +101,44 @@ package body Expression is
       Components : constant Component_Vectors.Vector :=
          Compilation.Components_Of (Source);
 
+      Last_Was_Operand : Boolean := False;
+
       procedure Push_Remaining_Operators is
       begin
          while not Pending_Operators.Is_Empty loop
-            Expr.Data.Steps.Append (Pending_Operators (Pending_Operators.Last));
+            Expr.Data.Steps.Append (
+               Pending_Operators (Pending_Operators.Last)
+            );
             Pending_Operators.Delete_Last;
          end loop;
       end Push_Remaining_Operators;
+
+      function Get_Operator (Operator : String) return Operator_Info is
+      (if Last_Was_Operand then
+            Operator_Map (Operator)
+         else
+            Operator_Map ("unary " & Operator)
+      );
+
+      procedure Push_Operator_Step (Component : String) is
+         Info : constant Operator_Info := Get_Operator (Component);
+      begin
+         Pending_Operators.Append (Info.Create.all);
+         Last_Was_Operand := False;
+      end Push_Operator_Step;
+
+      procedure Push_Numeric_Step (Component : String) is
+         Number : constant Float := Float'Value (Component);
+      begin
+         Expr.Data.Steps.Append (Create_Numeric_Step (Number));
+         Last_Was_Operand := True;
+      end Push_Numeric_Step;
+
+      procedure Push_Variable_Step (Name : String) is
+      begin
+         Expr.Data.Steps.Append (Create_Variable_Step (Name));
+         Last_Was_Operand := True;
+      end Push_Variable_Step;
 
    begin
       if Components.Is_Empty then
@@ -113,18 +146,19 @@ package body Expression is
       end if;
 
       Expr.Data := new Expression_Data;
+
       for Component of Components loop
          if Is_Operator (Component) then
-            Pending_Operators.Append (Operator_Map (Component).Create.all);
+            Push_Operator_Step (Component);
          elsif Is_Digit (Component (Component'First)) then
-            Expr.Data.Steps.Append (
-               Create_Numeric_Step (Float'Value (Component))
-            );
+            Push_Numeric_Step (Component);
          else
-            Expr.Data.Steps.Append (Create_Variable_Step (Component));
+            Push_Variable_Step (Component);
          end if;
       end loop;
       Push_Remaining_Operators;
+
+      --  Put_Line ("Compiled " & Source & " to " & Expr.Data.Steps'Image);
    end Compile;
 
    function Eval (

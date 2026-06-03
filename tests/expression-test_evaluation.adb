@@ -543,7 +543,6 @@ package body Expression.Test_Evaluation is
       Test_Xor (1.0, 1.0, "should evaluate 1.0 xor 1.0");
    end Test_Evaluate_Xor_Expression;
 
-
    --  -----------------
    overriding procedure Register_Tests (T : in out Test_Case) is
       use AUnit.Test_Cases.Registration;

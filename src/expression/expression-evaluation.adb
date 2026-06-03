@@ -40,13 +40,13 @@ package body Expression.Evaluation is
                end if;
             end;
          when Numeric_Step => Stack.Append (Step.Value);
-         when Not_Step =>
+         when Unary_Not_Step =>
             Stack.Append (Fuzzy_Not (Fuzzy_Clamp (Pop (Stack))));
-         when Un_Step =>
+         when Unary_Un_Step =>
             Stack.Append (Fuzzy_Un (Pop (Stack)));
-         when More_Step =>
+         when Unary_More_Step =>
             Stack.Append (Fuzzy_More (Pop (Stack)));
-         when Less_Step =>
+         when Unary_Less_Step =>
             Stack.Append (Fuzzy_Less (Pop (Stack)));
          when Unary_Minus_Step =>
             Stack.Append (-Pop (Stack));

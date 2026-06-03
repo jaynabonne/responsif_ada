@@ -8,10 +8,10 @@ private package Expression.Steps is
       No_Step,
       Variable_Step,
       Numeric_Step,
-      Not_Step,
-      Un_Step,
-      More_Step,
-      Less_Step,
+      Unary_Not_Step,
+      Unary_Un_Step,
+      Unary_More_Step,
+      Unary_Less_Step,
       Unary_Minus_Step,
       Unary_Plus_Step,
       Multiply_Step,
@@ -51,16 +51,16 @@ private package Expression.Steps is
       (Kind => Numeric_Step, Value => Number);
 
    function Create_Not_Step return Compiled_Step is
-      (Kind => Not_Step);
+      (Kind => Unary_Not_Step);
 
    function Create_Un_Step return Compiled_Step is
-      (Kind => Un_Step);
+      (Kind => Unary_Un_Step);
 
    function Create_More_Step return Compiled_Step is
-      (Kind => More_Step);
+      (Kind => Unary_More_Step);
 
    function Create_Less_Step return Compiled_Step is
-      (Kind => Less_Step);
+      (Kind => Unary_Less_Step);
 
    function Create_Unary_Minus_Step return Compiled_Step is
       (Kind => Unary_Minus_Step);
