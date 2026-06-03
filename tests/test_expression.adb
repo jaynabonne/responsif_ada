@@ -60,7 +60,9 @@ package body Test_Expression is
       TC ("4 * var1", 40.0),
       TC ("var1 / var2", 2.0),
       TC ("-var1", -10.0),
-      TC ("+var2", 5.0)
+      TC ("+var2", 5.0),
+      TC ("var1+var2*5", 35.0),
+      TC ("var1-var2+3", 8.0)
    ];
 
    procedure Test_Expression (Test_Case : Expression_Test_Case) is

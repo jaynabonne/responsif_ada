@@ -26,7 +26,7 @@ package body Expression is
 
    package Step_Vectors is new Ada.Containers.Indefinite_Vectors
    (Index_Type       => Natural,
-      Element_Type    => Compiled_Step);
+      Element_Type    => Operator_Info);
 
    function Build_Operator_Map return Operator_Maps.Map is
       Map : Operator_Maps.Map;
@@ -137,7 +137,7 @@ package body Expression is
       begin
          while not Pending_Operators.Is_Empty loop
             Expr.Data.Steps.Append (
-               Pending_Operators (Pending_Operators.Last)
+               Pending_Operators (Pending_Operators.Last).Create.all
             );
             Pending_Operators.Delete_Last;
          end loop;
@@ -153,7 +153,22 @@ package body Expression is
       procedure Push_Operator_Step (Component : String) is
          Info : constant Operator_Info := Get_Operator (Component);
       begin
-         Pending_Operators.Append (Info.Create.all);
+         if not Info.Unary then
+            while not Pending_Operators.Is_Empty loop
+               declare
+                  Last_Operator : constant Operator_Info :=
+                     Pending_Operators (Pending_Operators.Last);
+               begin
+                  if Last_Operator.Precedence <= Info.Precedence then
+                     Expr.Data.Steps.Append (Last_Operator.Create.all);
+                     Pending_Operators.Delete_Last;
+                  else
+                     exit;
+                  end if;
+               end;
+            end loop;
+         end if;
+         Pending_Operators.Append (Info);
          Last_Was_Operand := False;
       end Push_Operator_Step;
 
