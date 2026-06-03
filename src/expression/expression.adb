@@ -51,6 +51,16 @@ package body Expression is
          Unary => True,
          Create => Create_Less_Step'Access)
       );
+      Map.Insert ("unary -", (
+         Precedence => 1,
+         Unary => True,
+         Create => Create_Unary_Minus_Step'Access)
+      );
+      Map.Insert ("unary +", (
+         Precedence => 1,
+         Unary => True,
+         Create => Create_Unary_Plus_Step'Access)
+      );
       Map.Insert ("and", (
          Precedence => 11,
          Unary => False,
@@ -65,6 +75,26 @@ package body Expression is
          Precedence => 12,
          Unary => False,
          Create => Create_Xor_Step'Access)
+      );
+      Map.Insert ("*", (
+         Precedence => 3,
+         Unary => False,
+         Create => Create_Multiply_Step'Access)
+      );
+      Map.Insert ("/", (
+         Precedence => 3,
+         Unary => False,
+         Create => Create_Divide_Step'Access)
+      );
+      Map.Insert ("+", (
+         Precedence => 4,
+         Unary => False,
+         Create => Create_Add_Step'Access)
+      );
+      Map.Insert ("-", (
+         Precedence => 4,
+         Unary => False,
+         Create => Create_Subtract_Step'Access)
       );
       return Map;
    end Build_Operator_Map;

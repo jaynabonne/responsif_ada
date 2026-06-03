@@ -50,8 +50,7 @@ package body Expression.Evaluation is
             Stack.Append (Fuzzy_Less (Pop (Stack)));
          when Unary_Minus_Step =>
             Stack.Append (-Pop (Stack));
-         when Unary_Plus_Step =>
-            Stack.Append (Pop (Stack));
+         when Unary_Plus_Step => null;
          when Multiply_Step =>
                declare
                   Right : constant Float := Pop (Stack);

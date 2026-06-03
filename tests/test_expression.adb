@@ -54,7 +54,13 @@ package body Test_Expression is
       TC ("not not var1", Fuzzy_Not (Fuzzy_Not (1.0))),
       TC ("0.3 and 0.6", Fuzzy_And (0.3, 0.6)),
       TC ("0.3 or 0.6", Fuzzy_Or (0.3, 0.6)),
-      TC ("0.3 xor 0.6", Fuzzy_Xor (0.3, 0.6))
+      TC ("0.3 xor 0.6", Fuzzy_Xor (0.3, 0.6)),
+      TC ("4 + var1", 14.0),
+      TC ("var1-6", 4.0),
+      TC ("4 * var1", 40.0),
+      TC ("var1 / var2", 2.0),
+      TC ("-var1", -10.0),
+      TC ("+var2", 5.0)
    ];
 
    procedure Test_Expression (Test_Case : Expression_Test_Case) is
