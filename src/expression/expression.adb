@@ -96,6 +96,46 @@ package body Expression is
          Unary => False,
          Create => Create_Subtract_Step'Access)
       );
+      Map.Insert (">", (
+         Precedence => 6,
+         Unary => False,
+         Create => Create_Greater_Than_Step'Access)
+      );
+      Map.Insert (">=", (
+         Precedence => 6,
+         Unary => False,
+         Create => Create_Greater_Than_Or_Equal_Step'Access)
+      );
+      Map.Insert ("<", (
+         Precedence => 6,
+         Unary => False,
+         Create => Create_Less_Than_Step'Access)
+      );
+      Map.Insert ("<=", (
+         Precedence => 6,
+         Unary => False,
+         Create => Create_Less_Than_Or_Equal_Step'Access)
+      );
+      Map.Insert ("=", (
+         Precedence => 7,
+         Unary => False,
+         Create => Create_Equals_Step'Access)
+      );
+      Map.Insert ("!=", (
+         Precedence => 7,
+         Unary => False,
+         Create => Create_Not_Equals_Step'Access)
+      );
+      Map.Insert ("<>", (
+         Precedence => 7,
+         Unary => False,
+         Create => Create_Not_Equals_Step'Access)
+      );
+      Map.Insert ("equals", (
+         Precedence => 7,
+         Unary => False,
+         Create => Create_Fuzzy_Equals_Step'Access)
+      );
       return Map;
    end Build_Operator_Map;
 

@@ -62,7 +62,15 @@ package body Test_Expression is
       TC ("-var1", -10.0),
       TC ("+var2", 5.0),
       TC ("var1+var2*5", 35.0),
-      TC ("var1-var2+3", 8.0)
+      TC ("var1-var2+3", 8.0),
+      TC ("var1 > var2", 1.0),
+      TC ("var1 >= var2", 1.0),
+      TC ("var1 < var2 + 8", 1.0),
+      TC ("var1 <= var2 + 5", 1.0),
+      TC ("var1 = var2 + 5", 1.0),
+      TC ("0.9 equals 0.6", Fuzzy_Equals (0.9, 0.6)),
+      TC ("var1 != var2 + 6", 1.0),
+      TC ("var1 <> var2", 1.0)
    ];
 
    procedure Test_Expression (Test_Case : Expression_Test_Case) is
